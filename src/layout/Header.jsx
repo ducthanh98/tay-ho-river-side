@@ -18,7 +18,8 @@ const styles ={
     headerWrap:{
         backgroundColor: '#fff',
         padding: 0,
-        textAlign:'end'
+        textAlign:'end',
+        borderBottom: '1px solid #C2C2C229'
     }
 
 }
