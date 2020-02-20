@@ -10,7 +10,7 @@ import {connect} from "react-redux";
 const Login =(props)=>{
         return (
             <>
-                {props.isAuthenticated && <Redirect to={'/'}/>}
+                {props.authReducer.isAuthenticated && <Redirect to={'/'}/>}
                 <Row className={'h-100'} type="flex" justify="center" align="middle">
                     <Col span={6}>
                         <p className={'title'}>TayHoRiverview</p>
@@ -23,7 +23,7 @@ const Login =(props)=>{
 
 const mapStateToProps = state=>{
     return {
-        isAuthenticated:state.isAuthenticated
+        authReducer:state.authReducer
     }
 }
 

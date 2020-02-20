@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { Form,  Input, Button } from 'antd';
+import {TOKEN} from "../../../shared/constants/constant";
 
 class LoginForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                localStorage.setItem(TOKEN,'xxx')
                 return this.props.login()
             }
         });

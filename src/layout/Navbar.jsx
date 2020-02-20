@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 
 import {logout} from "../redux/auth/authActions";
 import Rectangle from '../assets/images/Rectangle 813.png'
+import {TOKEN} from "../shared/constants/constant";
 const { SubMenu } = Menu;
 const {Sider} = Layout;
 
@@ -18,12 +19,21 @@ const styles = {
         fontSize:'20px',
         borderBottom:'1px solid #032A47'
     },
-    navbarWrap:{
+    rectangle:{
+        position:'absolute',
+        left:0,
+        bottom:20,
+        width:'200px',
+        height:'80px',
         backgroundImage:`url(${Rectangle})!important`,
     }
 }
 
 const Navbar = (props)=>{
+        const logout = ()=>{
+            localStorage.removeItem(TOKEN);
+            props.logout();
+        }
 
         return (
             <>
@@ -43,7 +53,7 @@ const Navbar = (props)=>{
                                     </Link>
                                 </Menu.Item>
                                 <SubMenu
-                                    key="1"
+                                    key="2"
                                     title={
                                         <Link to={''}>
                                             <img src={require('../assets/images/format_indent_increase-24px.svg')} alt={'business'}/> &nbsp;
@@ -69,14 +79,14 @@ const Navbar = (props)=>{
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="5">
-                                    <Link to={'#'} onClick={props.logout}>
+                                    <Link to={'#'} onClick={logout}>
                                         <img src={require('../assets/images/power_settings_new-24px.svg')} alt={'logout'}/> &nbsp;
                                         <span>Đăng xuất</span>
                                     </Link>
                                 </Menu.Item>
                             </Menu>
                         </Router>
-
+                    <img style={styles.rectangle} src={require('../assets/images/Rectangle 813.png')}/>
                     </Sider>
                 }
             </>
@@ -84,9 +94,11 @@ const Navbar = (props)=>{
 }
 
 const mapStateToProps = state=>{
-    return {
-        isAuthenticated:state.isAuthenticated
+    const props = {
+        isAuthenticated: state.authReducer.isAuthenticated
+
     }
+    return props;
 }
 
 const mapDispatchToProps = dispatch=>{

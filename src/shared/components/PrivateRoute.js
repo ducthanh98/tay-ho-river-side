@@ -20,7 +20,7 @@ const PrivateRoute = ({ isAuthenticated,children, ...rest })=>{
 
 const mapStateToProps=state=>{
     return {
-        isAuthenticated:state.isAuthenticated
+        isAuthenticated:state.authReducer.isAuthenticated
     }
 }
 

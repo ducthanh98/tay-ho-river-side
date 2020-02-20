@@ -13,10 +13,6 @@ import 'antd/dist/antd.css';
 
 
 class App extends React.Component {
-    state = {
-        showLayout: true,
-    };
-
   render() {
     return (
         <Provider store={store}>

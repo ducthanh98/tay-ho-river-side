@@ -41,7 +41,7 @@ const CustomHeader = (props)=>{
 }
 const mapStateToProps = state=>{
     return {
-        isAuthenticated:state.isAuthenticated
+        isAuthenticated:state.authReducer.isAuthenticated
     }
 }
 
