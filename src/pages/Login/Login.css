@@ -1,0 +1,28 @@
+
+.title{
+    font-family: 'Lobster', cursive;
+    color: #032A47;
+    font-size: 45px;
+    text-align: center;
+}
+
+.ant-form-item-label > label {
+    font-family: 'Segoe UI Regular';
+    color: #484848;
+}
+.login-btn{
+    background: #032A47 0% 0% no-repeat padding-box;
+    color: #FFFFFF;
+    width: 60%;
+    border-radius: 0;
+    font-family: 'Segoe UI Regular';
+}
+.btn-wrap{
+    text-align: center;
+}
+.forgot-text{
+    color: #ACD637;
+}
+.ant-form-item{
+    margin-bottom: 0;
+}
