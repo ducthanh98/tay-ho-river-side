@@ -1,21 +1,19 @@
 import React from 'react';
 import { Layout } from 'antd';
-import {Provider} from 'react-redux'
 
 
-import Header from "./layout/Header";
-import Navbar from "./layout/Navbar";
-import RouterOutlet from "./layout/RouterOutlet";
-import store from "./redux/store";
+import Header from "./elements/Header";
+import Navbar from "./elements/Navbar";
+import RouterOutlet from "./elements/RouterOutlet";
 
 import './App.css';
 import 'antd/dist/antd.css';
+import {BrowserRouter as Router} from "react-router-dom";
 
 
 class App extends React.Component {
   render() {
     return (
-        <Provider store={store}>
             <Layout style={{ height:'100%' }}>
                 <Navbar/>
                 <Layout>
@@ -23,7 +21,7 @@ class App extends React.Component {
                     <RouterOutlet></RouterOutlet>
                 </Layout>
             </Layout>
-        </Provider>
+
     );
   }
 }

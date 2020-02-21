@@ -1,15 +1,16 @@
-
 import React from 'react';
 import { Form,  Input, Button } from 'antd';
-import {TOKEN} from "../../../shared/constants/constant";
+import {Redirect, withRouter} from 'react-router-dom'
+import {AuthService} from '../../../services/authService'
 
 class LoginForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                localStorage.setItem(TOKEN,'xxx')
-                return this.props.login()
+                const userInfo = {id:'1'};
+                localStorage.setItem('userInfo',JSON.stringify(userInfo))
+                await AuthService.setAndBroadcast({...AuthService.get(),userInfo})
             }
         });
 
@@ -52,5 +53,5 @@ class LoginForm extends React.Component {
 }
 
 
-export default Form.create({ name: 'login' })(LoginForm);
+export default withRouter(Form.create({ name: 'login' })(LoginForm));
 

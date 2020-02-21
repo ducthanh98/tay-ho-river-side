@@ -1,11 +1,8 @@
-import React from 'react';
+import React, {Component, useState} from 'react';
 import {Menu, Icon, Layout} from "antd";
 import {BrowserRouter as Router, Link } from "react-router-dom";
-import {connect} from 'react-redux';
-
-import {logout} from "../redux/auth/authActions";
 import Rectangle from '../assets/images/Rectangle 813.png'
-import {TOKEN} from "../shared/constants/constant";
+import {AuthService} from "../services/authService";
 const { SubMenu } = Menu;
 const {Sider} = Layout;
 
@@ -29,17 +26,27 @@ const styles = {
     }
 }
 
-const Navbar = (props)=>{
-        const logout = ()=>{
-            localStorage.removeItem(TOKEN);
-            props.logout();
-        }
+class Navbar extends Component{
+    state = {
+        userInfo: AuthService.get().userInfo
+    }
 
+    componentDidMount(){
+        AuthService.onChange('navbar',()=>{
+            this.setState({userInfo:AuthService.get().userInfo})
+        });
+    }
+
+    logout = async ()=>{
+        localStorage.removeItem('userInfo');
+        await AuthService.setAndBroadcast({...AuthService.get(),userInfo:null})
+    }
+    render() {
         return (
             <>
                 {
-                    props.isAuthenticated &&
-                    <Sider style={styles.navbarWrap}>
+                    this.state.userInfo &&
+                    <Sider>
                         <div style={styles.logo}>
                             <Icon type="container" style={{paddingRight: '10px'}} />
                             TayHoRiverview
@@ -79,35 +86,23 @@ const Navbar = (props)=>{
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="5">
-                                    <Link to={'#'} onClick={logout}>
+                                    <Link to={'#'} onClick={this.logout}>
                                         <img src={require('../assets/images/power_settings_new-24px.svg')} alt={'logout'}/> &nbsp;
                                         <span>Đăng xuất</span>
                                     </Link>
                                 </Menu.Item>
                             </Menu>
                         </Router>
-                    <img style={styles.rectangle} src={require('../assets/images/Rectangle 813.png')}/>
+                        <img style={styles.rectangle} src={require('../assets/images/Rectangle 813.png')} alt='rectangle'/>
                     </Sider>
                 }
             </>
         );
-}
-
-const mapStateToProps = state=>{
-    const props = {
-        isAuthenticated: state.authReducer.isAuthenticated
-
     }
-    return props;
-}
 
-const mapDispatchToProps = dispatch=>{
-    return {
-        logout:()=>dispatch(logout())
+    componentWillUnmount() {
+        AuthService.deleteKey('navbar')
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Navbar);
+export default Navbar;
