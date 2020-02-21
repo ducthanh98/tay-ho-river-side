@@ -1,0 +1,29 @@
+.title-page{
+    color: #555555;
+    font-size:14px;
+    font-weight: bold;
+}
+
+.combobox-label{
+    color:#8E8E8E;
+}
+.critieria-wrap{
+    padding-bottom: 20px;
+    border-bottom: 1px solid #D8D8D8;
+}
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+.text-bold{
+    color: #171717;
+    font-weight: bold;
+}
+.text{
+    color: #444444;
+}
+
+.ant-table-thead > tr > th{
+    background: #032A47 0% 0% no-repeat padding-box;
+    color: #444444;
+}

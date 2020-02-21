@@ -1,26 +1,26 @@
 import React from 'react';
-import { Layout } from 'antd';
 
-
-import Header from "./elements/Header";
-import Navbar from "./elements/Navbar";
-import RouterOutlet from "./elements/RouterOutlet";
-
+import PageLayout from "./elements/PageLayout";
 import './App.css';
 import 'antd/dist/antd.css';
-import {BrowserRouter as Router} from "react-router-dom";
+import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
+import Login from "./screens/Login/Login";
+import PrivateRoute from "./utils/components/PrivateRoute";
 
 
 class App extends React.Component {
   render() {
     return (
-            <Layout style={{ height:'100%' }}>
-                <Navbar/>
-                <Layout>
-                    <Header />
-                    <RouterOutlet></RouterOutlet>
-                </Layout>
-            </Layout>
+        <Router>
+                <Switch>
+                    <Route path='/login' >
+                        <Login />
+                    </Route>
+                    <PrivateRoute path='/'>
+                        <PageLayout/>
+                    </PrivateRoute>
+                </Switch>
+        </Router>
 
     );
   }

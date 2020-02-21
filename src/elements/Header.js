@@ -1,7 +1,6 @@
 import Layout from "antd/es/layout";
 import {Avatar,Badge} from "antd";
-import React, {Component, useState} from "react";
-import {AuthService} from '../services/authService'
+import React from "react";
 
 
 const { Header } = Layout;
@@ -25,22 +24,8 @@ const styles ={
     }
 
 }
-class CustomHeader extends Component{
-    state = {
-        userInfo: AuthService.get().userInfo
-    }
-
-    componentDidMount(){
-        AuthService.onChange('header',()=>{
-            this.setState({userInfo:AuthService.get().userInfo})
-        });
-    }
-
-    render() {
+const CustomHeader = ()=>{
         return(
-            <>
-                {
-                    this.state.userInfo &&
                     <Header style={styles.headerWrap}>
                         <Badge count={1}>
                             <Avatar shape="square"  icon="bell" />
@@ -48,14 +33,7 @@ class CustomHeader extends Component{
                         <span style={styles.username}>Nguyen Dong Anh</span>
                         <Avatar style={styles.avatar} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                     </Header>
-                }
-            </>
-
         )
-    }
-    componentWillUnmount() {
-        AuthService.deleteKey('header')
-    }
 }
 
 
