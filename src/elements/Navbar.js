@@ -1,7 +1,6 @@
-import React, {Component, useState} from 'react';
+import React from 'react';
 import {Menu, Icon, Layout} from "antd";
-import {BrowserRouter as Router, Link } from "react-router-dom";
-import Rectangle from '../assets/images/Rectangle 813.png'
+import {BrowserRouter as Router, Link,useRouteMatch } from "react-router-dom";
 import {AuthService} from "../services/authService";
 const { SubMenu } = Menu;
 const {Sider} = Layout;
@@ -22,30 +21,16 @@ const styles = {
         bottom:20,
         width:'200px',
         height:'80px',
-        backgroundImage:`url(${Rectangle})!important`,
     }
 }
 
-class Navbar extends Component{
-    state = {
-        userInfo: AuthService.get().userInfo
-    }
-
-    componentDidMount(){
-        AuthService.onChange('navbar',()=>{
-            this.setState({userInfo:AuthService.get().userInfo})
-        });
-    }
-
-    logout = async ()=>{
+const Navbar =()=>{
+    const logout = async ()=>{
         localStorage.removeItem('userInfo');
         await AuthService.setAndBroadcast({...AuthService.get(),userInfo:null})
     }
-    render() {
-        return (
-            <>
-                {
-                    this.state.userInfo &&
+
+    return (
                     <Sider>
                         <div style={styles.logo}>
                             <Icon type="container" style={{paddingRight: '10px'}} />
@@ -54,7 +39,7 @@ class Navbar extends Component{
                         <Router>
                             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                                 <Menu.Item key="1">
-                                    <Link to={''}>
+                                    <Link to={'/'}>
                                         <img src={require('../assets/images/business-24px.svg')} alt={'contact'}/> &nbsp;
                                         <span>Quản lý tòa nhà</span>
                                     </Link>
@@ -62,7 +47,7 @@ class Navbar extends Component{
                                 <SubMenu
                                     key="2"
                                     title={
-                                        <Link to={''}>
+                                        <Link to={'/'}>
                                             <img src={require('../assets/images/format_indent_increase-24px.svg')} alt={'business'}/> &nbsp;
                                             <span>Quản lý căn hộ</span>
                                         </Link>
@@ -74,19 +59,19 @@ class Navbar extends Component{
                                 </SubMenu>
 
                                 <Menu.Item key="3">
-                                    <Link to={''}>
+                                    <Link to={'/customer-management'}>
                                         <img src={require('../assets/images/contacts-24px.svg')} alt={'contact'}/> &nbsp;
                                         <span>Quản lý người mua</span>
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="4">
-                                    <Link to={''}>
+                                    <Link to={'/'}>
                                         <img src={require('../assets/images/post_add-24px.svg')} alt={'notification'}/> &nbsp;
                                         <span>Tạo thông báo</span>
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="5">
-                                    <Link to={'#'} onClick={this.logout}>
+                                    <Link to={'#'} onClick={logout}>
                                         <img src={require('../assets/images/power_settings_new-24px.svg')} alt={'logout'}/> &nbsp;
                                         <span>Đăng xuất</span>
                                     </Link>
@@ -95,14 +80,8 @@ class Navbar extends Component{
                         </Router>
                         <img style={styles.rectangle} src={require('../assets/images/Rectangle 813.png')} alt='rectangle'/>
                     </Sider>
-                }
-            </>
-        );
-    }
+    );
 
-    componentWillUnmount() {
-        AuthService.deleteKey('navbar')
-    }
 }
 
 export default Navbar;

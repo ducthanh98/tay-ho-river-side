@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form,  Input, Button } from 'antd';
-import {Redirect, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {AuthService} from '../../../services/authService'
 
 class LoginForm extends React.Component {
