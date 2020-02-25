@@ -7,13 +7,13 @@ const styles ={
     }
 }
 
-const UserInfoModal = ({dataModal,visible,handleCancel})=> {
+const UserInfoModal = ({dataModal,visible,setShowModal})=> {
         return (
             <div>
                 <Modal
                     title={dataModal.name}
                     visible={visible}
-                    onCancel={handleCancel}
+                    onCancel={()=>setShowModal(false)}
                     footer=''
                 >
                     <p> Tên căn hộ : <span style={styles.textBold}>{dataModal.apartment_name}</span> </p>

@@ -40,12 +40,19 @@ const Navbar =()=>{
                             TayHoRiverview
                         </div>
                             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                                <Menu.Item key="1">
-                                    <Link to={''}>
-                                        <img src={require('../assets/images/business-24px.svg')} alt={'contact'}/> &nbsp;
-                                        <span>Quản lý tòa nhà</span>
-                                    </Link>
-                                </Menu.Item>
+                                <SubMenu
+                                    key="1"
+                                    title={
+                                        <Link to={''}>
+                                            <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
+                                            <span>Quản lý dự án</span>
+                                        </Link>
+                                    }
+                                >
+                                    <Menu.Item key="6">Quản lý tòa nhà</Menu.Item>
+                                    <Menu.Item key="7">Quản lý mặt bằng</Menu.Item>
+                                </SubMenu>
+
                                 <SubMenu
                                     key="2"
                                     title={

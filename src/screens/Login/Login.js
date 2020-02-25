@@ -1,25 +1,27 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Row, Col } from 'antd';
-import {Redirect} from 'react-router-dom'
+import {Redirect} from "react-router-dom";
+
 
 import {AuthService} from '../../services/authService'
 import WrappedLoginForm from './components/LoginForm'
 import './Login.css';
 
-class Login extends Component{
-    state = {
-        userInfo: AuthService.get().userInfo
-    }
+const Login =()=>{
+    const [userInfo,setUserInfo] = useState(AuthService.get().userInfo);
 
-    componentDidMount(){
+    useEffect(()=>{
         AuthService.onChange('login',()=>{
-            this.setState({userInfo:AuthService.get().userInfo})
+            setUserInfo(AuthService.get().userInfo)
         });
-    }
-    render(){
+        return ()=>{
+            AuthService.deleteKey('login')
+        }
+    },[])
+
         return (
             <>
-                {this.state.userInfo && <Redirect to={'/'}/>}
+                {userInfo && <Redirect to={'/'}/>}
                 <Row className={'h-100'} type="flex" justify="center" align="middle">
                     <Col span={6}>
                         <p className={'title'}>TayHoRiverview</p>
@@ -28,13 +30,7 @@ class Login extends Component{
                 </Row>
             </>
         );
-    }
 
-
-
-    componentWillUnmount() {
-        AuthService.deleteKey('login')
-    }
 }
 
 

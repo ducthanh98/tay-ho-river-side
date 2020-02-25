@@ -5,6 +5,8 @@ import Notification from "../screens/Notification/Notification";
 import Navbar from "./Navbar";
 import {Layout} from "antd";
 import Header from "./Header";
+import ProjectInfomationManagement
+    from "../screens/BuildingManagement/ProjectInfomationManagement /ProjectInfomationManagement";
 
 class PageLayout extends Component {
 
@@ -22,6 +24,9 @@ class PageLayout extends Component {
                             <Route path='/notifications'>
                                 <Notification/>
                             </Route>
+                            {/*<Route path='/project-infomation-management'>*/}
+                            {/*    <ProjectInfomationManagement/>*/}
+                            {/*</Route>*/}
 
                         </Switch>
                     </Layout.Content>

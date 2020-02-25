@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form,  Input, Button } from 'antd';
-import {Redirect, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {AuthService} from '../../../services/authService'
 
 class LoginForm extends React.Component {
@@ -38,9 +38,9 @@ class LoginForm extends React.Component {
                     })(<Input.Password />)}
                 </Form.Item>
                 <Form.Item className={'btn-wrap '}>
-                    <a className="forgot-text" href="">
+                    <span className="forgot-text">
                         Forgot password
-                    </a>
+                    </span>
                 </Form.Item>
                 <Form.Item className={'btn-wrap'}>
                     <Button type="primary" htmlType="submit" className="login-btn">

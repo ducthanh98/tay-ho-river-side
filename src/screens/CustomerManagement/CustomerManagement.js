@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import './CustomerManagement.css';
 import {Select, Table} from 'antd';
 import { Row, Col } from 'antd';
 import UserInfoModal from "./components/UserInfoModal";
-class CustomerManagement extends Component {
-    state = {
-        columns :[
+const CustomerManagement = ()=> {
+    const columns = [
             {
                 title: 'Người mua',
                 dataIndex: 'name',
@@ -41,7 +40,7 @@ class CustomerManagement extends Component {
                 title:'Giá',
                 dataIndex:'price',
                 key:'price',
-                render: text => <p >{this.formatCurrency(text) } triệu</p>,
+                render: text => <p >{formatCurrency(text) } triệu</p>,
             },
             {
                 title:'Thanh toán',
@@ -56,8 +55,8 @@ class CustomerManagement extends Component {
                 render: text => <p >{text}</p>,
 
             }
-        ],
-        dataSource:[
+        ];
+    const dataSource = [
             {
                 key: '1',
                 name: 'John Brown',
@@ -103,31 +102,27 @@ class CustomerManagement extends Component {
                 date:'13/02/2020'
             },
 
-        ],
-        visible:false,
-        dataModal : {}
-    }
+        ];
+    const [showModal,setShowModal] = useState(false);
+    const [dataModal,setDataModal]  = useState({})
 
 
-    formatCurrency = (price, separate = ".")=>{
+    const formatCurrency = (price, separate = ".")=>{
         const str = price.toString();
         const regex = /\B(?=(\d{3})+(?!\d))/g;
         const result = str.replace(regex, separate);
         return result;
     }
 
-    onRow=(record, rowIndex) => {
+    const onRow=(record, rowIndex) => {
             return {
-                onClick: (event)=>{this.renderModal(event,record)}
+                onClick: (event)=>{renderModal(event,record)}
         };
     }
-    renderModal = (event,record)=>{
-        this.setState({visible:true,dataModal:record})
+    const renderModal = (event,record)=>{
+        setShowModal(true);
+        setDataModal(record);
     }
-    handleCancel = e => {
-        this.setState({visible: false,});
-    };
-    render() {
 
         return (
             <div>
@@ -155,11 +150,10 @@ class CustomerManagement extends Component {
                         </Select>
                     </Col>
                 </Row>
-                <Table onRow={this.onRow} dataSource={this.state.dataSource} columns={this.state.columns} />;
-                <UserInfoModal visible={this.state.visible} dataModal={this.state.dataModal} handleCancel={this.handleCancel}/>
+                <Table onRow={onRow} dataSource={dataSource} columns={columns} />;
+                <UserInfoModal  visible={showModal} dataModal={dataModal} setShowModal={setShowModal}/>
             </div>
         );
-    }
 }
 
 export default CustomerManagement;
