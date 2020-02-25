@@ -1,37 +1,35 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import { Route, Redirect } from "react-router-dom";
 
 import {AuthService} from '../../services/authService'
 
-class PrivateRoute extends Component {
-    state = {
-        userInfo: AuthService.get().userInfo
-    }
+const PrivateRoute = (props)=>{
+    const [userInfo,setUserInfo] = useState(AuthService.get().userInfo);
 
-    componentDidMount(){
+    useEffect(()=>{
+        console.log('test')
         AuthService.onChange('privateRoute',()=>{
-            this.setState({userInfo:AuthService.get().userInfo})
+           setUserInfo(AuthService.get().userInfo)
         });
-    }
 
-    render() {
+        return ()=>{
+            AuthService.deleteKey('privateRoute')
+        }
+    },[])
+
         return (
             <Route
-                {...this.props.rest}
+                {...props.rest}
                 render={({ location }) =>
-                    this.state.userInfo ? (
-                        this.props.children
+                    userInfo ? (
+                        props.children
                     ) : (
                         <Redirect to='login'/>
                     )
                 }
             />
         );
-    }
 
-    componentWillUnmount() {
-        AuthService.deleteKey('privateRoute')
-    }
 }
 
 
