@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form,  Input, Button,notification } from 'antd';
 import {AuthService} from '../../../services/authService'
-import {doPost} from "../../../utils/API";
 import {LoadingService} from "../../../services/loadingService";
+import {baseURL} from "../../../utils/config";
 
 const LoginForm =(props)=> {
     const handleSubmit = e => {
@@ -18,11 +18,12 @@ const LoginForm =(props)=> {
     const login = async (values)=>{
         try{
             await LoadingService.setAndBroadcast(true)
+
+
             const response = await doPost('/api/v1/user/login',values);
 
             await processReponse(response);
         } catch (e) {
-
             notification['error']({
                 message: 'Error',
                 description: e.message
@@ -32,6 +33,20 @@ const LoginForm =(props)=> {
         finally {
             await LoadingService.setAndBroadcast(false)
         }
+    }
+
+
+    const doPost = async (url, data) =>{
+
+        const response = await fetch(`${baseURL}${url}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return await response.json();
     }
 
     const processReponse = async (res)=>{
