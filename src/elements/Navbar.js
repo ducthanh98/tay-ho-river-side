@@ -30,7 +30,7 @@ const Navbar =()=>{
 
     const logout = async ()=>{
         localStorage.removeItem('userInfo');
-        await AuthService.setAndBroadcast({...AuthService.get(),userInfo:null})
+        await AuthService.setAndBroadcast(null)
     }
 
         return (

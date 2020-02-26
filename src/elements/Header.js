@@ -1,6 +1,7 @@
 import Layout from "antd/es/layout";
 import {Avatar, Badge, Menu,Dropdown} from "antd";
 import React from "react";
+import {AuthService} from "../services/authService";
 
 
 const { Header } = Layout;
@@ -84,6 +85,10 @@ const CustomHeader = ()=>{
 
         </Menu>
     );
+
+    const {userName} = AuthService.get();
+
+
     return(
                     <Header style={styles.headerWrap}>
                         <Dropdown overlay={renderMenu} trigger={['click']}>
@@ -92,7 +97,7 @@ const CustomHeader = ()=>{
                             </Badge>
                         </Dropdown>
 
-                        <span style={styles.username}>Nguyen Dong Anh</span>
+                        <span style={styles.username}>{userName}</span>
                         <Avatar style={styles.avatar} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
 
                     </Header>

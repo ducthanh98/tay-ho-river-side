@@ -4,12 +4,11 @@ import { Route, Redirect } from "react-router-dom";
 import {AuthService} from '../../services/authService'
 
 const PrivateRoute = (props)=>{
-    const [userInfo,setUserInfo] = useState(AuthService.get().userInfo);
+    const [userInfo,setUserInfo] = useState(AuthService.get());
 
     useEffect(()=>{
-        console.log('test')
         AuthService.onChange('privateRoute',()=>{
-           setUserInfo(AuthService.get().userInfo)
+           setUserInfo(AuthService.get())
         });
 
         return ()=>{

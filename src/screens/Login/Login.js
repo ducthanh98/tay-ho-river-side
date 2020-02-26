@@ -8,11 +8,11 @@ import WrappedLoginForm from './components/LoginForm'
 import './Login.css';
 
 const Login =()=>{
-    const [userInfo,setUserInfo] = useState(AuthService.get().userInfo);
+    const [userInfo,setUserInfo] = useState(AuthService.get());
 
     useEffect(()=>{
         AuthService.onChange('login',()=>{
-            setUserInfo(AuthService.get().userInfo)
+            setUserInfo(AuthService.get())
         });
         return ()=>{
             AuthService.deleteKey('login')
