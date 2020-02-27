@@ -1,0 +1,15 @@
+.upfile {
+  width: 150px;
+  height: 150px;
+  border: 2px solid;
+  display: block;
+}
+
+.image {
+  font-size: 80px;
+  color: #08c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%
+}
