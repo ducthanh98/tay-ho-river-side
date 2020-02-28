@@ -1,6 +1,7 @@
 import React from 'react'
-import { Row, Col, Tabs, Breadcrumb, Button, Form, Input } from 'antd';
+import { Row, Col, Tabs, Breadcrumb, Button, Form } from 'antd';
 import Uploadfile from "./components/UploadFile";
+import InforForm from "./components/InforForm";
 
 const { TabPane } = Tabs;
 
@@ -21,7 +22,6 @@ class Infor extends React.Component {
         address: '',
         documents: []
       },
-      listUpload: []
     }
   }
 
@@ -85,27 +85,9 @@ class Infor extends React.Component {
     });
   };
 
-  addNewFile = () => {
-    let item = 
-    <Uploadfile
-      documents={this.state.documents}
-      values={this.state.value}
-    />
-    this.setState(state => {
-      const list = state.listUpload.push(item);
-      return {
-        list
-      };
-    });
-  }
-
   render() {
 
-    const { getFieldDecorator } = this.props.form;
-    let upload = this.state.listUpload.map((item, i) => 
-    <div key={i}>
-      {item}
-    </div>)
+    const {form} = this.props
     return (
       <div>
         <Form onSubmit={this.handleSubmit} id="form1">
@@ -122,75 +104,12 @@ class Infor extends React.Component {
               <Col span={23}>
                 <Tabs defaultActiveKey="1" >
                   <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
-                    <Row>
-                      <Row>
-                        <h3>Văn phòng giao dịch</h3>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <Row gutter={[5,0]}>
-                            <Col span={4} pull={0}>
-                              <Form.Item>
-                                  Số điện thoại
-                                  {getFieldDecorator('officePhone', {
-                                    rules: [{ required: true, message: 'required!' }],
-                                  })(
-                                    <Input
-                                      placeholder="Số điện thoại"
-                                    />,
-                                  )}
-                                </Form.Item>
-                            </Col>
-                            <Col span={6} pull={0}>
-                              <Form.Item>
-                                Email
-                                {getFieldDecorator('Email', {
-                                  rules: [{ required: true, message: 'required!' }],
-                                })(
-                                  <Input
-                                    placeholder="Email"
-                                  />,
-                                )}
-                              </Form.Item>
-                            </Col>
-                            <Col span={14} pull={0}>
-                              <Form.Item>
-                                Link fanpage facebook
-                                {getFieldDecorator('linkFanpage', {
-                                  rules: [{ required: true, message: 'required!' }],
-                                })(
-                                  <Input
-                                    placeholder="Link fanpage facebook"
-                                  />,
-                                )}
-                              </Form.Item>
-                            </Col>
-                          </Row>
-                        </Col>
-                      </Row>
-                      <Row gutter={[5,0]}>
-                        <Col>
-                          <Form.Item>
-                              Địa chỉ
-                              {getFieldDecorator('address', {
-                                rules: [{ required: true, message: 'required!' }],
-                              })(
-                                <Input
-                                  placeholder="Địa chỉ"
-                                />,
-                              )}
-                            </Form.Item>
-                        </Col>
-                      </Row>
-                    </Row>
+                    <InforForm
+                      form={form}
+                    />
                   </TabPane>
                   <TabPane tab="TÀI LIỆU" key="2">
-                    <div>
-                      <button type="button" onClick={this.addNewFile}>Thêm mới</button>
-                      <div style={{display: 'flex'}}>
-                        {upload}
-                      </div>
-                    </div>
+                    <Uploadfile />
                   </TabPane>
                 </Tabs>
               </Col>

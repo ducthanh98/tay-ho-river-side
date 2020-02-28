@@ -1,69 +1,28 @@
-import React, { } from 'react';
-import './Upload.css'
-import { Icon } from 'antd';
+import React from 'react';
+import { Upload, Icon, Input, Button } from 'antd';
+import 'antd/dist/antd.css';
+import './Upload.css';
 
-class Uploadfile extends React.Component {
 
-  constructor(props) {
-    super(props)
+class UploadFile extends React.Component {
+  state = {
+    previewVisible: false,
+    previewImage: '',
+    fileList: [],
+    newfile: true,
+  };
 
-    this.state = {
-      value: this.props.values,
-      name: '',
-      documents: this.props.documents,
-      isUpload: true,
-      isRemove: true
-    }
-  }
+  handleCancel = () => this.setState({ previewVisible: false });
 
-  handleChange = (event) => {
-    this.setState({value: event.target.value});
-  }
+  handleChange = ({ fileList }) => {
+    this.setState({ fileList })
+  };
 
-  removeFile = (name) => {
-
-    this.setState({isRemove: false, name: ''})
-    this.removeUrl(name)
-
-  }
-
-  removeUrl = (name) => {
-
-    let index;
-
-    this.state.documents.forEach((element,i) => {
-      if (element.name === name) {
-        index = i;
-        return index;
-      }
-    });
-
-    this.setState(state => {
-      const list = state.documents.splice(index,1);
-      return {
-        list
-      };
-    });
-  }
-
-  uploadFile = () => {
-
-    this.setState({ isUpload: true, isRemove: true});
-
-  }
-
-  changeFile = (name) => {
-
-    this.setState({ isUpload: true });
-    this.removeUrl(name)
-
-  }
-
-  onChangeHandler = async (event)=>{
-
+  upLoad = (file) => {
+    this.setState({newfile: true})
+    console.log('asdff', file.name)
     let formData = new FormData();
-    formData.append('file', event.target.files[0]);
-    this.setState({name: event.target.files[0].name})
+    formData.append('file', file);
 
     fetch('http://139.162.53.137:3000/api/v1/file/upload', {
       method: 'POST',
@@ -72,77 +31,59 @@ class Uploadfile extends React.Component {
       .then((res)=>{
         return res.json()
       }).then((data)=>{
-        this.setState({ isUpload: false })
-        let item = {name: this.state.value, url: data.data[0].fileUrl}
-        
-        this.setState(state => {
-          const list = state.documents.push(item);
-          return {
-            list
-          };
-        });
-      console.log(this.state.documents)
+        console.log('data', data)
       })
       .catch((error) => console.log(error))
   }
 
-  render() {
+  addNewFile = () => {
+    this.setState({newfile: false})
+  }
 
-    let upload;
-    if(this.state.isUpload) {
-      upload = 
+  renderUploadButton = () => {
+    // const {newfile}=this.state;
+    if(this.state.newfile) return null;
+    return (
       <div>
-        <div>
-          <label className={'upfile'} htmlFor="formlabel">
-            <Icon className={'image'} type="file-pdf" />
-            Select file
-          </label>
-          <input style= {{display: 'none'}} type="file" name="file" id="formlabel" onChange={this.onChangeHandler}/>
-        </div>
+        {/* <Input style={{width: '150px'}}></Input> */}
+        <Icon type="upload" />
+        <div>Up Image</div>
       </div>
-    } else if(this.state.isRemove) {
-      upload = 
-      <div>
+    )
+  };
+
+  dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
+
+  render() {
+    let b = 
         <div>
-          <label className={'upfile'}>
-            {this.state.name}
-            <button type="button" onClick={() => this.changeFile(this.state.value)}><Icon type="swap"/></button>
-            <button type="button" onClick={() => this.removeFile(this.state.value)}><Icon type="delete"/></button>
-          </label>
-        </div>
-      </div>
-    } else {
-      upload = 
-        <div>
-          <div>
-            <label className={'upfile'}>
-              {this.state.name}
-              <button type="button" onClick={() => this.uploadFile(this.state.value)}>
-                <Icon className={'image'} type="file-pdf" />
-              </button>
-              Select file
-            </label>
+          {/* <Input style={{width: '150px'}}></Input> */}
+          <div className="clearfix">
+            <Upload
+              action={this.upLoad}
+              // beforeUpload={this.beforeUpload}
+              // method="PUT"
+              listType="picture-card"
+              // fileList={fileList}
+              // onPreview={this.handlePreview}
+              onChange={this.handleChange}
+              customRequest={this.dummyRequest}
+            >
+              {this.renderUploadButton()}
+            </Upload>
           </div>
         </div>
-    }
-
     return (
-      <div style = {{paddingTop: '20px'}}>
-        <div>
-          <label>
-            Tên file
-            <div>
-              <input type="text" value={this.state.value} onChange={this.handleChange} />
-            </div>
-          </label>
-        </div>
-        <div>
-          {upload}
-        </div>
+      <div>
+        <Button type="primary" onClick={this.addNewFile}>New File</Button>
+        {b}
       </div>
-  
     );
   }
 }
 
-export default Uploadfile;
+export default UploadFile
