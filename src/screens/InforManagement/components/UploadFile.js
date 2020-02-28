@@ -30,11 +30,16 @@ class Uploadfile extends React.Component {
     this.setState({ isUpload: true })
   }
 
-  changeFile = (id) => {
+  changeFile = (name) => {
 
     this.setState({ isUpload: true })
+    let index = this.state.documents.forEach((element,i) => {
+      if (element.name === name) {
+        return i;
+      }
+    });
     this.setState(state => {
-      const list = state.documents.splice(id,1);
+      const list = state.documents.splice(index,1);
       return {
         list
       };
@@ -58,7 +63,7 @@ class Uploadfile extends React.Component {
         this.setState({ isUpload: false })
         let id = this.state.documents.length;
         this.setState({id: id});
-        let item = {id: id, name: this.state.value, url: data.data[0].fileUrl}
+        let item = {name: this.state.value, url: data.data[0].fileUrl}
         
         this.setState(state => {
           const list = state.documents.push(item);
@@ -91,8 +96,8 @@ class Uploadfile extends React.Component {
         <div>
           <label className={'upfile'} htmlFor="formlabel1">
             {this.state.name}
-            <button type="button" onClick={() => this.changeFile(this.state.id)}><Icon type="swap"/></button>
-            <button type="button" onClick={() => this.removeFile(this.state.id)}><Icon type="delete"/></button>
+            <button type="button" onClick={() => this.changeFile(this.state.value)}><Icon type="swap"/></button>
+            <button type="button" onClick={() => this.removeFile(this.state.value)}><Icon type="delete"/></button>
           </label>
         </div>
       </div>

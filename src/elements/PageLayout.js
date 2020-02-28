@@ -23,7 +23,7 @@ class PageLayout extends Component {
                             <Route path='/notifications'>
                                 <Notification/>
                             </Route>
-                            <Route path='/infor-management'>
+                            <Route path='/'>
                                <Infor/>
                             </Route>
 
