@@ -1,7 +1,5 @@
 const changeObject = {};
-let dataStored = {
-  userInfo : getUserInfo()
-};
+let dataStored = getUserInfo();
 
 function getUserInfo() {
   try {

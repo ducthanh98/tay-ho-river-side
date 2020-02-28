@@ -1,28 +1,79 @@
 import React from 'react';
-import { Form,  Input, Button } from 'antd';
-import {withRouter} from 'react-router-dom'
+import { Form,  Input, Button,notification } from 'antd';
 import {AuthService} from '../../../services/authService'
+import {LoadingService} from "../../../services/loadingService";
+import {baseURL} from "../../../utils/config";
 
-class LoginForm extends React.Component {
-    handleSubmit = e => {
+const LoginForm =(props)=> {
+    const handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields(async (err, values) => {
+        props.form.validateFields(async (err, values) => {
             if (!err) {
-                const userInfo = {id:'1'};
-                localStorage.setItem('userInfo',JSON.stringify(userInfo))
-                await AuthService.setAndBroadcast({...AuthService.get(),userInfo})
+                await login(values);
             }
         });
 
     };
 
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
-                <Form.Item label="Name">
-                    {getFieldDecorator('username', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
+    const login = async (values)=>{
+        try{
+            await LoadingService.setAndBroadcast(true)
+
+
+            const response = await doPost('/api/v1/user/login',values);
+
+            await processReponse(response);
+        } catch (e) {
+            notification['error']({
+                message: 'Error',
+                description: e.message
+            });
+
+        }
+        finally {
+            await LoadingService.setAndBroadcast(false)
+        }
+    }
+
+
+    const doPost = async (url, data) =>{
+
+        const response = await fetch(`${baseURL}${url}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return await response.json();
+    }
+
+    const processReponse = async (res)=>{
+        if(res.status === 200){
+
+            const userInfo = res.data;
+            localStorage.setItem('userInfo',JSON.stringify(userInfo))
+            await AuthService.setAndBroadcast(userInfo)
+
+        } else {
+
+            notification['error']({
+                message: 'Error',
+                description: res.message
+            });
+
+        }
+    }
+
+    const { getFieldDecorator } = props.form;
+
+
+    return (
+            <Form onSubmit={handleSubmit} className="login-form">
+                <Form.Item label="Email">
+                    {getFieldDecorator('email', {
+                        rules: [{ required: true, message: 'Please input your email!' }],
                     })(
                         <Input />,
                     )}
@@ -38,9 +89,9 @@ class LoginForm extends React.Component {
                     })(<Input.Password />)}
                 </Form.Item>
                 <Form.Item className={'btn-wrap '}>
-                    <a className="forgot-text" href="">
+                    <span className="forgot-text">
                         Forgot password
-                    </a>
+                    </span>
                 </Form.Item>
                 <Form.Item className={'btn-wrap'}>
                     <Button type="primary" htmlType="submit" className="login-btn">
@@ -48,10 +99,9 @@ class LoginForm extends React.Component {
                     </Button>
                 </Form.Item>
             </Form>
-        );
-    }
+    );
 }
 
 
-export default withRouter(Form.create({ name: 'login' })(LoginForm));
+export default Form.create({ name: 'login' })(LoginForm);
 

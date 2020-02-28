@@ -1,30 +1,44 @@
-import React from 'react';
-import {Route, Switch} from "react-router-dom";
+import React, {Component} from 'react';
+import {Switch, Route } from "react-router-dom";
 import CustomerManagement from "../screens/CustomerManagement/CustomerManagement";
-import {Layout} from "antd";
+import Notification from "../screens/Notification/Notification";
 import Navbar from "./Navbar";
+import {Layout} from "antd";
 import Header from "./Header";
+import ProjectInfomationManagement
+    from "../screens/BuildingManagement/ProjectInfomationManagement /ProjectInfomationManagement";
+import NotificationDetail from "../screens/NotificationDetail/NotificationDetail";
 
-const PageLayout =()=>{
+class PageLayout extends Component {
+
+    render() {
         return (
             <Layout style={{ height:'100%' }}>
-                <Navbar />
-                <Layout>
+                <Navbar/>
+                <Layout >
                     <Header />
-                    <Layout.Content style={{ margin: '16px 16px' }}>
-                            <Switch>
-                                <Route path={`/customer-management`} >
-                                    <CustomerManagement />
-                                </Route>
-                                <Route path={`/`}>
-                                    <h3>Not Match.</h3>
-                                </Route>
-                            </Switch>
-                    </Layout.Content>
+                    <Layout.Content style={{margin:'20px'}}>
+                        <Switch>
+                            <Route path='/customer-management'>
+                                <CustomerManagement/>
+                            </Route>
+                            <Route path='/notifications'>
+                                <Notification/>
+                            </Route>
+                            <Route path='/notification-detail/:id'>
+                                <NotificationDetail/>
+                            </Route>
+                            {/*<Route path='/project-infomation-management'>*/}
+                            {/*    <ProjectInfomationManagement/>*/}
+                            {/*</Route>*/}
 
+                        </Switch>
+                    </Layout.Content>
                 </Layout>
             </Layout>
+
         );
+    }
 }
 
 
