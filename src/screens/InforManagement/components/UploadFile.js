@@ -12,7 +12,6 @@ class Uploadfile extends React.Component {
       name: '',
       documents: this.props.documents,
       isUpload: true,
-      listUpload: this.props.listUpload,
       isRemove: true
     }
   }
@@ -105,7 +104,7 @@ class Uploadfile extends React.Component {
       upload = 
       <div>
         <div>
-          <label className={'upfile'} htmlFor="formlabel1">
+          <label className={'upfile'}>
             {this.state.name}
             <button type="button" onClick={() => this.changeFile(this.state.value)}><Icon type="swap"/></button>
             <button type="button" onClick={() => this.removeFile(this.state.value)}><Icon type="delete"/></button>
@@ -116,12 +115,12 @@ class Uploadfile extends React.Component {
       upload = 
         <div>
           <div>
-            <label className={'upfile'} htmlFor="formlabel1">
+            <label className={'upfile'}>
               {this.state.name}
               <button type="button" onClick={() => this.uploadFile(this.state.value)}>
                 <Icon className={'image'} type="file-pdf" />
-                Select file
               </button>
+              Select file
             </label>
           </div>
         </div>

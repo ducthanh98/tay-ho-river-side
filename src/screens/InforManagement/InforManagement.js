@@ -90,7 +90,6 @@ class Infor extends React.Component {
     <Uploadfile
       documents={this.state.documents}
       values={this.state.value}
-      listUpload={this.state.listUpload}
     />
     this.setState(state => {
       const list = state.listUpload.push(item);
