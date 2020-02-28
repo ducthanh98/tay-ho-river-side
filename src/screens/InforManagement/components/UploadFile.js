@@ -13,7 +13,7 @@ class Uploadfile extends React.Component {
       documents: this.props.documents,
       isUpload: true,
       listUpload: this.props.listUpload,
-      id: ''
+      isRemove: true
     }
   }
 
@@ -21,29 +21,42 @@ class Uploadfile extends React.Component {
     this.setState({value: event.target.value});
   }
 
-  removeFile = (id) => {
-    this.setState(prevState => ({
-      documents: prevState.listUpload.map(
-      obj => (obj.id === id ? Object.assign(obj, { url: "" }) : obj)
-    )
-    }));
-    this.setState({ isUpload: true })
+  removeFile = (name) => {
+
+    this.setState({isRemove: false, name: ''})
+    this.removeUrl(name)
+
   }
 
-  changeFile = (name) => {
+  removeUrl = (name) => {
 
-    this.setState({ isUpload: true })
-    let index = this.state.documents.forEach((element,i) => {
+    let index;
+
+    this.state.documents.forEach((element,i) => {
       if (element.name === name) {
-        return i;
+        index = i;
+        return index;
       }
     });
+
     this.setState(state => {
       const list = state.documents.splice(index,1);
       return {
         list
       };
     });
+  }
+
+  uploadFile = () => {
+
+    this.setState({ isUpload: true, isRemove: true});
+
+  }
+
+  changeFile = (name) => {
+
+    this.setState({ isUpload: true });
+    this.removeUrl(name)
 
   }
 
@@ -61,8 +74,6 @@ class Uploadfile extends React.Component {
         return res.json()
       }).then((data)=>{
         this.setState({ isUpload: false })
-        let id = this.state.documents.length;
-        this.setState({id: id});
         let item = {name: this.state.value, url: data.data[0].fileUrl}
         
         this.setState(state => {
@@ -90,7 +101,7 @@ class Uploadfile extends React.Component {
           <input style= {{display: 'none'}} type="file" name="file" id="formlabel" onChange={this.onChangeHandler}/>
         </div>
       </div>
-    } else {
+    } else if(this.state.isRemove) {
       upload = 
       <div>
         <div>
@@ -101,6 +112,19 @@ class Uploadfile extends React.Component {
           </label>
         </div>
       </div>
+    } else {
+      upload = 
+        <div>
+          <div>
+            <label className={'upfile'} htmlFor="formlabel1">
+              {this.state.name}
+              <button type="button" onClick={() => this.uploadFile(this.state.value)}>
+                <Icon className={'image'} type="file-pdf" />
+                Select file
+              </button>
+            </label>
+          </div>
+        </div>
     }
 
     return (
