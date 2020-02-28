@@ -16,7 +16,7 @@ const Login = () => {
     return () => {
       AuthService.deleteKey("login");
     };
-  }, []); //FIXME: []: e kiểm tra lại xem useEffect như vậy đã chính xác trong trường hợp này chưa?
+  }, []);
 
   const renderRedirect = () => {
     if (userInfo) {
