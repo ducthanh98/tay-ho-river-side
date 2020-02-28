@@ -5,7 +5,7 @@ import './App.css';
 import 'antd/dist/antd.css';
 import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
 import Login from "./screens/Login/Login";
-import PrivateRoute from "./utils/components/PrivateRoute";
+import PrivateRoute from "./screens/PrivateRoute";
 import Loading from "./elements/Loading";
 
 

@@ -1,8 +1,8 @@
 import Layout from "antd/es/layout";
 import {Avatar, Badge, Menu,Dropdown} from "antd";
-import React from "react";
+import React, {useState} from "react";
 import {AuthService} from "../services/authService";
-
+import {BellTwoTone} from '@ant-design/icons';
 
 const { Header } = Layout;
 
@@ -44,6 +44,8 @@ const styles ={
 
 }
 const CustomHeader = ()=>{
+    const [listNoti,setListNoti] = useState([]);
+
     const renderMenu = (
         <Menu style={styles.notifyWrap}>
             <Menu.Item key="0">
@@ -91,9 +93,9 @@ const CustomHeader = ()=>{
 
     return(
                     <Header style={styles.headerWrap}>
-                        <Dropdown overlay={renderMenu} trigger={['click']}>
+                        <Dropdown  overlay={renderMenu} trigger={['click']}>
                             <Badge count={1} className="ant-dropdown-link">
-                                <Avatar shape="square"  icon="bell" />
+                                <BellTwoTone style={{fontSize:24}}/>
                             </Badge>
                         </Dropdown>
 

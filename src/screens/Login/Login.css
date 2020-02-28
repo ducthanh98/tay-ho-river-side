@@ -17,12 +17,12 @@
     border-radius: 0;
     font-family: 'Segoe UI Regular';
 }
-.btn-wrap{
-    text-align: center;
-}
+
 .forgot-text{
     color: #ACD637;
+    padding-left: 5%;
 }
 .ant-form-item{
-    margin-bottom: 0;
+    margin-bottom: 20px;
+
 }

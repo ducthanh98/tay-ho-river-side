@@ -1,5 +1,6 @@
 import React from 'react';
-import {Icon} from "antd";
+import {CloseOutlined} from '@ant-design/icons'
+
 
 const styles = {
     listSelectedWrap:{
@@ -49,7 +50,8 @@ const ListReceiver =(props)=> {
                             return (
                                 <li key={value.key} style={styles.li}>
                                     {value.name}
-                                    <Icon type="close" onClick={()=>removeReceiver(index)} />
+
+                                    <CloseOutlined onClick={()=>removeReceiver(index)} />
                                 </li>
                             )
                         })

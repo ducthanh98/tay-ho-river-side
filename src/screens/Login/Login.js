@@ -25,13 +25,11 @@ const Login = () => {
     return null;
   };
 
-  //FIXME: tránh việc sử dụng ternary operator trong render
   return (
     <>
-      {/* {userInfo && <Redirect to={"/"} />} */}
       {renderRedirect()}
       <Row className={"h-100"} type="flex" justify="center" align="middle">
-        <Col span={6}>
+        <Col span={7}>
           <p className={"title"}>TayHoRiverview</p>
           <LoginForm />
         </Col>

@@ -23,6 +23,3 @@ export const NotificationStyles = {
         color: '#FFFFFF'
     }
 }
-
-
-

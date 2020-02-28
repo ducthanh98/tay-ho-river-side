@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-import { AuthService } from "../../services/authService";
+import { AuthService } from "../services/authService";
 
-//FIXME: e chuyển lại màn hình này vào phần screens nhé, e xoá folder này đi
 const PrivateRoute = props => {
   const [userInfo, setUserInfo] = useState(AuthService.get());
 
@@ -17,13 +16,20 @@ const PrivateRoute = props => {
     };
   }, []);
 
+  const renderComponent=()=>{
+      if(userInfo){
+          return (props.children)
+      }
+      return (<Redirect to="login" />)
+  }
+
   return (
     <Route
       {...props.rest}
       render={({ location }) =>
-        //tránh sử dụng ternary operator trong lúc render
-        //nên tách thành hàm riêng
-        userInfo ? props.children : <Redirect to="login" />
+
+          renderComponent()
+
       }
     />
   );

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Menu, Icon, Layout} from "antd";
+import {Menu, Layout} from "antd";
+import {ContainerTwoTone} from '@ant-design/icons'
 import {Link } from "react-router-dom";
 import Rectangle from '../assets/images/Rectangle 813.png'
 import {AuthService} from "../services/authService";
@@ -30,13 +31,13 @@ const Navbar =()=>{
 
     const logout = async ()=>{
         localStorage.removeItem('userInfo');
-        await AuthService.setAndBroadcast(null)
+        AuthService.setAndBroadcast(null)
     }
 
         return (
                     <Sider>
                         <div style={styles.logo}>
-                            <Icon type="container" style={{paddingRight: '10px'}} />
+                            <ContainerTwoTone style={{paddingRight: '10px'}} />
                             TayHoRiverview
                         </div>
                             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
