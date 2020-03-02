@@ -27,13 +27,12 @@ class UploadFile extends React.Component {
   };
 
   handleChangeName = (e) => {
-    // let name = e.target.value;
-    // this.setState(prevState => {
-    //   let value = Object.assign({}, prevState.value);  // creating copy of state variable jasper
-    //   value.name = name;                // update the name property, assign a new value                 
-    //   return { value };
-    // })
+    console.log('change')
     this.setState({name: e.target.value});
+  }
+
+  onRemove = (e) => {
+    console.log('remove', e)
   }
 
   upLoad = (file) => {
@@ -49,20 +48,16 @@ class UploadFile extends React.Component {
       .then((res)=>{
         return res.json()
       }).then((data)=>{
-        // let item = {name: this.state.value, url: data.data[0].fileUrl}
-        // let item = {name: this.state.name, url: data.data[0].fileUrl}
-        
+        let item = {name: this.state.name, url: data.data[0].fileUrl}
         this.setState(state => {
-          const list = state.documents.push;
-          list.map(e => {
-            if(e !== 'null') {
-              
-            }
-          })
+          const list = state.documents;
+          list.pop();
+          list.push(item);
           return {
             list
           };
         });
+
         console.log('data', this.state.documents)
       })
       .catch((error) => console.log(error))
@@ -104,6 +99,7 @@ class UploadFile extends React.Component {
               // beforeUpload={this.beforeUpload}
               // method="PUT"
               listType="picture-card"
+              onRemove={this.onRemove(this.state.name)}
               // fileList={fileList}
               // onPreview={this.handlePreview}
               onChange={this.handleChange}
@@ -117,7 +113,6 @@ class UploadFile extends React.Component {
       <div key={i}>
         <Input style={{width: '105px'}} 
           placeholder="Input name"
-          // value={item.name}
           onChange={this.handleChangeName}
         />
       </div>)
