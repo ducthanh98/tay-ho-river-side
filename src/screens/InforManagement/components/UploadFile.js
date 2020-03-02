@@ -1,5 +1,6 @@
 import React from 'react';
-import { Upload, Icon, Input, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { Upload, Input, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './Upload.css';
 
@@ -82,10 +83,10 @@ class UploadFile extends React.Component {
     if(this.state.newfile) return null;
     return (
       <div>
-        <Icon type="upload" />
+        <UploadOutlined />
         <div>Up Image</div>
       </div>
-    )
+    );
   };
 
   dummyRequest = ({ file, onSuccess }) => {
