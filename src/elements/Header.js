@@ -1,4 +1,5 @@
 import Layout from "antd/es/layout";
+import { BellOutlined } from '@ant-design/icons';
 import {Avatar, Badge, Menu,Dropdown} from "antd";
 import React from "react";
 
@@ -84,19 +85,19 @@ const CustomHeader = ()=>{
 
         </Menu>
     );
-    return(
-                    <Header style={styles.headerWrap}>
-                        <Dropdown overlay={renderMenu} trigger={['click']}>
-                            <Badge count={1} className="ant-dropdown-link">
-                                <Avatar shape="square"  icon="bell" />
-                            </Badge>
-                        </Dropdown>
+    return (
+        <Header style={styles.headerWrap}>
+            <Dropdown overlay={renderMenu} trigger={['click']}>
+                <Badge count={1} className="ant-dropdown-link">
+                    <Avatar shape="square"  icon={<BellOutlined />} />
+                </Badge>
+            </Dropdown>
 
-                        <span style={styles.username}>Nguyen Dong Anh</span>
-                        <Avatar style={styles.avatar} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            <span style={styles.username}>Nguyen Dong Anh</span>
+            <Avatar style={styles.avatar} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
 
-                    </Header>
-    )
+        </Header>
+    );
 }
 
 

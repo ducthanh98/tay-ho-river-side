@@ -1,5 +1,7 @@
 import React from 'react'
-import { Row, Col, Form, Input,} from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Input } from 'antd';
 
 
 

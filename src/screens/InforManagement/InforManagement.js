@@ -1,5 +1,7 @@
 import React from 'react'
-import { Row, Col, Tabs, Breadcrumb, Button, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Tabs, Breadcrumb, Button } from 'antd';
 import Uploadfile from "./components/UploadFile";
 import InforForm from "./components/InforForm";
 

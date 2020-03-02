@@ -49,10 +49,15 @@ class UploadFile extends React.Component {
         return res.json()
       }).then((data)=>{
         // let item = {name: this.state.value, url: data.data[0].fileUrl}
-        let item = {name: this.state.name, url: data.data[0].fileUrl}
+        // let item = {name: this.state.name, url: data.data[0].fileUrl}
         
         this.setState(state => {
-          const list = state.documents.push(item);
+          const list = state.documents.push;
+          list.map(e => {
+            if(e !== 'null') {
+              
+            }
+          })
           return {
             list
           };

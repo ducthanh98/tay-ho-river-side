@@ -1,5 +1,6 @@
 import React from 'react';
-import {Menu, Icon, Layout} from "antd";
+import { ContainerOutlined } from '@ant-design/icons';
+import { Menu, Layout } from "antd";
 import {Link } from "react-router-dom";
 import Rectangle from '../assets/images/Rectangle 813.png'
 import {AuthService} from "../services/authService";
@@ -34,66 +35,66 @@ const Navbar =()=>{
     }
 
         return (
-                    <Sider>
-                        <div style={styles.logo}>
-                            <Icon type="container" style={{paddingRight: '10px'}} />
-                            TayHoRiverview
-                        </div>
-                            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                                {/* <SubMenu
-                                    key="1"
-                                    title={
-                                        <Link to={''}>
-                                            <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
-                                            <span>Quản lý dự án</span>
-                                        </Link>
-                                    }
-                                >
-                                    <Menu.Item key="6">Quản lý tòa nhà</Menu.Item>
-                                    <Menu.Item key="7">Quản lý mặt bằng</Menu.Item>
-                                </SubMenu>
+            <Sider>
+                <div style={styles.logo}>
+                    <ContainerOutlined style={{paddingRight: '10px'}} />
+                    TayHoRiverview
+                </div>
+                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                        {/* <SubMenu
+                            key="1"
+                            title={
+                                <Link to={''}>
+                                    <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
+                                    <span>Quản lý dự án</span>
+                                </Link>
+                            }
+                        >
+                            <Menu.Item key="6">Quản lý tòa nhà</Menu.Item>
+                            <Menu.Item key="7">Quản lý mặt bằng</Menu.Item>
+                        </SubMenu>
 
-                                <SubMenu
-                                    key="2"
-                                    title={
-                                        <Link to={''}>
-                                            <img src={require('../assets/images/Icon_quản_lý_căn_hộ.svg')} alt={'business'}/> &nbsp;
-                                            <span>Quản lý căn hộ</span>
-                                        </Link>
-                                    }
-                                >
-                                    <Menu.Item key="3">Tom</Menu.Item>
-                                    <Menu.Item key="4">Bill</Menu.Item>
-                                    <Menu.Item key="5">Alex</Menu.Item>
-                                </SubMenu> */}
-                                <Menu.Item key="1">
-                                    <Link to={'/infor-management'}>
-                                      <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
-                                      <span>Quản lý dự án</span>
-                                    </Link>
-                                </Menu.Item>
+                        <SubMenu
+                            key="2"
+                            title={
+                                <Link to={''}>
+                                    <img src={require('../assets/images/Icon_quản_lý_căn_hộ.svg')} alt={'business'}/> &nbsp;
+                                    <span>Quản lý căn hộ</span>
+                                </Link>
+                            }
+                        >
+                            <Menu.Item key="3">Tom</Menu.Item>
+                            <Menu.Item key="4">Bill</Menu.Item>
+                            <Menu.Item key="5">Alex</Menu.Item>
+                        </SubMenu> */}
+                        <Menu.Item key="1">
+                            <Link to={'/infor-management'}>
+                              <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
+                              <span>Quản lý dự án</span>
+                            </Link>
+                        </Menu.Item>
 
-                                <Menu.Item key="3">
-                                    <Link to={'/customer-management'}>
-                                        <img src={require('../assets/images/contacts-24px.svg')} alt={'contact'}/> &nbsp;
-                                        <span>Quản lý người mua</span>
-                                    </Link>
-                                </Menu.Item>
-                                <Menu.Item key="4">
-                                    <Link to={'/notifications'}>
-                                        <img src={require('../assets/images/post_add-24px.svg')} alt={'notification'}/> &nbsp;
-                                        <span>Tạo thông báo</span>
-                                    </Link>
-                                </Menu.Item>
-                                <Menu.Item key="5">
-                                    <Link to={'/login'} onClick={logout}>
-                                        <img src={require('../assets/images/power_settings_new-24px.svg')} alt={'logout'}/> &nbsp;
-                                        <span>Đăng xuất</span>
-                                    </Link>
-                                </Menu.Item>
-                            </Menu>
-                        <img style={styles.rectangle} src={require('../assets/images/Rectangle 813.png')} alt='rectangle'/>
-                    </Sider>
+                        <Menu.Item key="3">
+                            <Link to={'/customer-management'}>
+                                <img src={require('../assets/images/contacts-24px.svg')} alt={'contact'}/> &nbsp;
+                                <span>Quản lý người mua</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="4">
+                            <Link to={'/notifications'}>
+                                <img src={require('../assets/images/post_add-24px.svg')} alt={'notification'}/> &nbsp;
+                                <span>Tạo thông báo</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="5">
+                            <Link to={'/login'} onClick={logout}>
+                                <img src={require('../assets/images/power_settings_new-24px.svg')} alt={'logout'}/> &nbsp;
+                                <span>Đăng xuất</span>
+                            </Link>
+                        </Menu.Item>
+                    </Menu>
+                <img style={styles.rectangle} src={require('../assets/images/Rectangle 813.png')} alt='rectangle'/>
+            </Sider>
         );
 
 }
