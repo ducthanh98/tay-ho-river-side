@@ -1,5 +1,5 @@
-import Api from '../constants/Api';
-import {STRINGS} from '../resource';
+import {Api} from './Api';
+import {STRINGS} from './resource';
 
 function fetchWithTimeOut(promise, ms = 30000) {
   return new Promise((resolve, reject) => {
@@ -42,9 +42,18 @@ const CommonCall = async (api, header) => {
 };
 
 const FetchApi = {
-  example: ({param1, params2}) => {
+  login: (data) => {
+    const header = {
+      method: 'POST',
+      mode: "cors",
+      body: JSON.stringify(data)
+    };
+    const api = Api.login();
+    return CommonCall(api, header);
+  },
+  getNotifications: (page) => {
     const header = {method: 'GET'};
-    const api = Api.example({param1, params2});
+    const api = Api.notification(page);
     return CommonCall(api, header);
   },
 };

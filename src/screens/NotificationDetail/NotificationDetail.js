@@ -1,18 +1,35 @@
 import React from 'react';
 import { PageHeader } from 'antd';
 import {NotificationDetailStyles} from './NotificationDetailStyles'
+import {NotificationService} from "../../services/notificationService";
+import {withRouter} from 'react-router-dom';
+
 const NotificationDetail = (props) => {
+    const noti = NotificationService.get();
+
+    const renderContent = ()=>{
+        if(noti){
+            return (
+                <>
+                    <p style={NotificationDetailStyles.notiHeader}>{noti.title}</p>
+                    <p style={NotificationDetailStyles.notiTime}>{new Date(noti.createdTime).toLocaleString()}</p>
+                    <p>{noti.description}</p>
+                </>
+            )
+        }
+        return;
+    }
+
+
     return (
         <div>
             <PageHeader
-            onBack={() => null}
+            onBack={() => props.history.goBack()}
             title="Quay lại"
             />
-            <p style={NotificationDetailStyles.notiHeader}>Trần Bình đã thêm 3 căn hộ mới</p>
-            <p style={NotificationDetailStyles.notiTime}>6:00 am 18/02/2020</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            {renderContent()}
         </div>
     );
 };
 
-export default NotificationDetail;
+export default withRouter(NotificationDetail);

@@ -2,9 +2,8 @@ import React from "react";
 import { Form, Input, Button, notification } from "antd";
 import { AuthService } from "../../../services/authService";
 import { LoadingService } from "../../../services/loadingService";
-import { baseURL } from "../../../utils/config";
+import {FetchApi} from "../../../utils/modules";
 
-//FIXME: Form update to v4,có thay đổi lại nên e update lại nhé
 const LoginForm = props => {
     const layout = {
         labelCol: {
@@ -71,53 +70,31 @@ const LoginForm = props => {
         }
     ]
 
-  //FIXME: việc call và fetch api nên được tách ra thành 1 file riêng
-  //và e đang khai báo qúa nhiều hàm chỉ dành cho việc call api, nên tối giản code lại
+
   const onFinish = async values => {
     try {
-        console.log(values)
+
       await LoadingService.setAndBroadcast(true);
+      const res = await FetchApi.login(values)
 
-      const response = await doPost("/api/v1/user/login", values);
 
-      processReponse(response);
+      if (res.status === 200) {
+           localStorage.setItem("userInfo", JSON.stringify(res.data));
+           AuthService.setAndBroadcast(res.data);
+      } else {
+           throw Error(res.message)
+      }
+
+
     } catch (e) {
-      notification["error"]({
-        message: "Error",
-        description: e.message
-      });
+
+      notification["error"]({message: "Error", description: e.message});
+
     } finally {
       LoadingService.setAndBroadcast(false);
     }
   };
 
-  const doPost = async (url, data) => {
-    const response = await fetch(`${baseURL}${url}`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-    return await response.json();
-  };
-
-  const processReponse = res => {
-    if (res.status === 200) {
-      const userInfo = res.data;
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      AuthService.setAndBroadcast(userInfo);
-    } else {
-      notification["error"]({
-        message: "Error",
-        description: res.message
-      });
-    }
-  };
-
-  //FIXME: với việc các component tương tự nhau như thế này e nên sử dụng 1 array để cấu hình cho việc render
-  //tại đây chỉ cần map array đó ra để render thôi
   return (
       <Form
           {...layout}

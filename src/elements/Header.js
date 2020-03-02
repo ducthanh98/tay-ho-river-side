@@ -1,9 +1,11 @@
 import Layout from "antd/es/layout";
 import {Avatar, Badge, Menu,Dropdown} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AuthService} from "../services/authService";
 import {BellTwoTone} from '@ant-design/icons';
-
+import {FetchApi} from "../utils/modules";
+import {withRouter} from 'react-router-dom';
+import {NotificationService} from "../services/notificationService";
 const { Header } = Layout;
 
 const styles ={
@@ -26,7 +28,8 @@ const styles ={
     notifyWrap:{
         width:'300px',
         maxHeight:'360px',
-        overflowY:'scroll'
+        overflowY:'scroll',
+        position:'relative'
     },
     notiHeader:{
         fontWeight:'bold',
@@ -40,52 +43,74 @@ const styles ={
     notiTime:{
         color:'#8E8E8E',
         fontSize:'12px'
+    },
+    notiFooter:{
+        textDecoration:'underline',
+        textAlign:'center',
+        cursor:'pointer'
     }
 
 }
-const CustomHeader = ()=>{
+const CustomHeader = (props)=>{
     const [listNoti,setListNoti] = useState([]);
+    const [nextPage,setNextPage] = useState(0);
+
+    const loadNotify = ()=>{
+        FetchApi.getNotifications(nextPage)
+            .then((res)=>{
+
+                if(res.nextPage === ''){
+                    setNextPage(nextPage + 1)
+                } else {
+                    setNextPage(-1)
+                }
+
+                setListNoti(listNoti.concat(res.data));
+            })
+
+    }
+
+
+    useEffect(loadNotify,[])
+
+
+
+    const navigate = (index)=> {
+        NotificationService.set(listNoti[index])
+        props.history.push('/notification-detail')
+    }
+
+    const renderSeeMore = ()=>{
+        if(nextPage > 0){
+            return (
+                    <Menu.Item style={styles.notiFooter} key="see-more" onClick={()=>loadNotify()}>
+                        <span >Xem thêm</span>
+                    </Menu.Item>
+            )
+        }
+        return;
+    }
 
     const renderMenu = (
-        <Menu style={styles.notifyWrap}>
-            <Menu.Item key="0">
-                <span style={styles.notiHeader}>Thông báo</span>
-            </Menu.Item>
-            <Menu.Divider/>
-            <Menu.Item key="1">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="2">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="3">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="4">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="5">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="6">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="7">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
-            <Menu.Item key="8">
-                <span style={styles.notiContent}>Trần Bình đã thêm 3 căn hộ mới</span>
-                <p style={styles.notiTime}>6:00 am  18/02/2020</p>
-            </Menu.Item>
 
-        </Menu>
+            <Menu style={styles.notifyWrap}>
+                <Menu.Item key="0">
+                    <span style={styles.notiHeader}>Thông báo</span>
+                </Menu.Item>
+                <Menu.Divider/>
+                {
+                    listNoti.map((noti,index) => (
+                        <Menu.Item key={noti.id} onClick={()=>navigate(index)}>
+                            <span style={styles.notiContent}>{noti.title}</span>
+                            <p style={styles.notiTime}>{new Date(noti.createdTime).toLocaleString()}</p>
+                        </Menu.Item>
+                    ))
+                }
+                <Menu.Divider/>
+
+                {renderSeeMore()}
+            </Menu>
+
     );
 
     const {userName} = AuthService.get();
@@ -107,4 +132,4 @@ const CustomHeader = ()=>{
 }
 
 
-export default CustomHeader;
+export default withRouter(CustomHeader);
