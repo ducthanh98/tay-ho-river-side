@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import CustomerManagement from "../screens/CustomerManagement/CustomerManagement";
 import Notification from "../screens/Notification/Notification";
+import Infor from "../screens/InforManagement/InforManagement";
 import Navbar from "./Navbar";
 import { Layout } from "antd";
 import Header from "./Header";

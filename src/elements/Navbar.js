@@ -4,7 +4,7 @@ import {ContainerTwoTone} from '@ant-design/icons'
 import {Link } from "react-router-dom";
 import Rectangle from '../assets/images/Rectangle 813.png'
 import {AuthService} from "../services/authService";
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 const {Sider} = Layout;
 
 const styles = {
@@ -41,7 +41,7 @@ const Navbar =()=>{
                             TayHoRiverview
                         </div>
                             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                                <SubMenu
+                                {/* <SubMenu
                                     key="1"
                                     title={
                                         <Link to={''}>
@@ -66,7 +66,13 @@ const Navbar =()=>{
                                     <Menu.Item key="3">Tom</Menu.Item>
                                     <Menu.Item key="4">Bill</Menu.Item>
                                     <Menu.Item key="5">Alex</Menu.Item>
-                                </SubMenu>
+                                </SubMenu> */}
+                                <Menu.Item key="1">
+                                    <Link to={'/infor-management'}>
+                                      <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
+                                      <span>Quản lý dự án</span>
+                                    </Link>
+                                </Menu.Item>
 
                                 <Menu.Item key="3">
                                     <Link to={'/customer-management'}>
