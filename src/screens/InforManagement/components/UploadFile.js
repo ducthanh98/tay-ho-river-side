@@ -5,18 +5,35 @@ import './Upload.css';
 
 
 class UploadFile extends React.Component {
-  state = {
-    previewVisible: false,
-    previewImage: '',
-    fileList: [],
-    newfile: true,
-  };
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      // value: {name: '', url: ''},
+      name: '',
+      fileList: [],
+      newfile: true,
+      documents: this.props.documents
+    };
+  }
 
   handleCancel = () => this.setState({ previewVisible: false });
 
   handleChange = ({ fileList }) => {
     this.setState({ fileList })
   };
+
+  handleChangeName = (e) => {
+    // let name = e.target.value;
+    // this.setState(prevState => {
+    //   let value = Object.assign({}, prevState.value);  // creating copy of state variable jasper
+    //   value.name = name;                // update the name property, assign a new value                 
+    //   return { value };
+    // })
+    this.setState({name: e.target.value});
+  }
 
   upLoad = (file) => {
     this.setState({newfile: true})
@@ -31,21 +48,35 @@ class UploadFile extends React.Component {
       .then((res)=>{
         return res.json()
       }).then((data)=>{
-        console.log('data', data)
+        // let item = {name: this.state.value, url: data.data[0].fileUrl}
+        let item = {name: this.state.name, url: data.data[0].fileUrl}
+        
+        this.setState(state => {
+          const list = state.documents.push(item);
+          return {
+            list
+          };
+        });
+        console.log('data', this.state.documents)
       })
       .catch((error) => console.log(error))
   }
 
   addNewFile = () => {
     this.setState({newfile: false})
+    let value = {};
+    this.setState(state => {
+      const list = state.documents.push(value);
+      return {
+        list
+      };
+    });  
   }
 
   renderUploadButton = () => {
-    // const {newfile}=this.state;
     if(this.state.newfile) return null;
     return (
       <div>
-        {/* <Input style={{width: '150px'}}></Input> */}
         <Icon type="upload" />
         <div>Up Image</div>
       </div>
@@ -61,7 +92,6 @@ class UploadFile extends React.Component {
   render() {
     let b = 
         <div>
-          {/* <Input style={{width: '150px'}}></Input> */}
           <div className="clearfix">
             <Upload
               action={this.upLoad}
@@ -77,10 +107,21 @@ class UploadFile extends React.Component {
             </Upload>
           </div>
         </div>
+      let input = this.state.documents.map((item, i) => 
+      <div key={i}>
+        <Input style={{width: '105px'}} 
+          placeholder="Input name"
+          // value={item.name}
+          onChange={this.handleChangeName}
+        />
+      </div>)
     return (
       <div>
         <Button type="primary" onClick={this.addNewFile}>New File</Button>
-        {b}
+        <div>
+          <div style={{display: 'flex'}}>{input}</div>
+          {b}
+        </div>
       </div>
     );
   }

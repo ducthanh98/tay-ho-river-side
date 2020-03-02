@@ -71,6 +71,4 @@ const InforForm = (props) => {
   );
 }
 
-// const WrappedLogin = Form.create()(InforForm)
-
 export default InforForm;

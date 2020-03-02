@@ -109,7 +109,9 @@ class Infor extends React.Component {
                     />
                   </TabPane>
                   <TabPane tab="TÀI LIỆU" key="2">
-                    <Uploadfile />
+                    <Uploadfile 
+                      documents={this.state.documents}
+                    />
                   </TabPane>
                 </Tabs>
               </Col>
