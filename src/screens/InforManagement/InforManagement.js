@@ -1,9 +1,10 @@
 import React from 'react'
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Row, Col, Tabs, Breadcrumb, Button } from 'antd';
+import { Row, Col, Tabs, Breadcrumb, Button, notification } from 'antd';
 import Uploadfile from "./components/UploadFile";
 import InforForm from "./components/InforForm";
+import { FetchApi } from "../../utils/modules";
 
 const { TabPane } = Tabs;
 
@@ -28,34 +29,45 @@ class Infor extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://139.162.53.137:3000/api/v1/project', {
-      method: 'GET',
-      })
-      .then((res)=>{
-        return res.json()
-      }).then((data1)=>{
+
+    this.getInfor();
+
+  }
+
+  getInfor = async () => {
+    try {
+      const res = await FetchApi.getInforManager()
+      if (res.status === 200) {
         this.setState(prevState => {
           let data = Object.assign({}, prevState.data);
-          data.id = data1.data.id;
-          data.name = data1.data.name;
-          data.description = data1.data.description;           
-          data.officePhone = data1.data.officePhone;                     
-          data.linkFanpage = data1.data.linkFanpage;           
-          data.createdTime = data1.data.createdTime;
-          data.address = data1.data.address;                 
-          data.documents = data1.data.documents;                
+          data.id = res.data.id;
+          data.name = res.data.name;
+          data.description = res.data.description;           
+          data.officePhone = res.data.officePhone;                     
+          data.linkFanpage = res.data.linkFanpage;           
+          data.createdTime = res.data.createdTime;
+          data.address = res.data.address;                 
+          data.documents = res.data.documents;           
 
           return { data };                             
         })
-      })
-      .catch((error) => console.log(error))
+
+      } else {
+            throw Error(res.message)
+      }
+
+    } catch (e) {
+
+      notification["error"]({message: "Error", description: e.message});
+      
+    }
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       const start = Date.now();
-      this.setState(prevState => {
+      this.setState( async prevState => {
         let data = Object.assign({}, prevState.data);
         data.officePhone = values.officePhone;                 
         data.linkFanpage = values.linkFanpage;         
@@ -63,22 +75,22 @@ class Infor extends React.Component {
         data.address = values.address;  
         data.Email = values.Email;             
         data.documents = prevState.documents;
-        const body = JSON.stringify(data);
 
-        fetch('http://139.162.53.137:3000/api/v1/project', {
-          method: 'PUT',
-          body: body,
-          mode: 'cors',
-          headers: {
-              'Content-Type': 'application/json'
+        try {
+          const res = await FetchApi.putInfo(data)
+          if (res.status === 200) {
+                console.log('ress', res.data)
+            } 
+          else {
+            throw Error(res.message)
           }
-          })
-          .then((res)=>{
-            return res.json()
-          }).then((data)=>{
-            console.log('data update', data)
-          })
-          .catch((error) => console.log(error))
+    
+        } catch (e) {
+    
+          notification["error"]({message: "Error", description: e.message});
+          
+        }
+
         return { data };                              
       })
       

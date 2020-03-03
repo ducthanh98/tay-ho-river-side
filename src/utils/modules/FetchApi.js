@@ -1,5 +1,5 @@
-import Api from '../constants/Api';
-import {STRINGS} from '../resource';
+import {Api} from './Api';
+import {STRINGS} from './resource';
 
 function fetchWithTimeOut(promise, ms = 30000) {
   return new Promise((resolve, reject) => {
@@ -15,7 +15,6 @@ function fetchWithTimeOut(promise, ms = 30000) {
  * @param {*} header {method,}
  */
 const CommonCall = async (api, header) => {
-  console.log('api', api);
   try {
     let headers = {
       'Content-Type': 'application/json',
@@ -30,7 +29,6 @@ const CommonCall = async (api, header) => {
     }
 
     const result = await response.json();
-    console.log('result', result);
 
     return result;
   } catch (error) {
@@ -42,11 +40,49 @@ const CommonCall = async (api, header) => {
 };
 
 const FetchApi = {
-  example: ({param1, params2}) => {
-    const header = {method: 'GET'};
-    const api = Api.example({param1, params2});
+
+  login: (data) => {
+    const header = {
+      method: 'POST',
+      mode: "cors",
+      body: JSON.stringify(data)
+    };
+    const api = Api.login();
     return CommonCall(api, header);
   },
+
+  getNotifications: (page) => {
+    const header = {method: 'GET'};
+    const api = Api.notification(page);
+    return CommonCall(api, header);
+  },
+
+  getInforManager: () => {
+    const header = {method: 'GET'};
+    const api = Api.getInforManager();
+    return CommonCall(api, header);
+  },
+
+  uploadFile: (data) => {
+    const header = {
+      method: 'POST',
+      // mode: "cors",
+      body: data
+    };
+    const api = Api.uploadFile();
+    return CommonCall(api, header);
+  },
+
+  putInfo: (data) => {
+    const header = {
+      method: 'PUT',
+      mode: "cors",
+      body: JSON.stringify(data)
+    };
+    const api = Api.putInfo(data);
+    return CommonCall(api, header);
+  }
+
 };
 
 export {FetchApi};

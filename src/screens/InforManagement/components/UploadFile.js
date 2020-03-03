@@ -1,8 +1,9 @@
 import React from 'react';
 import { UploadOutlined } from '@ant-design/icons';
-import { Upload, Input, Button } from 'antd';
+import { Upload, Input, Button, notification } from 'antd';
 import 'antd/dist/antd.css';
 import './Upload.css';
+import {FetchApi} from '../../../utils/modules';
 
 
 class UploadFile extends React.Component {
@@ -27,7 +28,6 @@ class UploadFile extends React.Component {
   };
 
   handleChangeName = (e) => {
-    console.log('change')
     this.setState({name: e.target.value});
   }
 
@@ -35,32 +35,46 @@ class UploadFile extends React.Component {
     console.log('remove', e)
   }
 
-  upLoad = (file) => {
+  upLoad = async (file) => {
     this.setState({newfile: true})
-    console.log('asdff', file.name)
     let formData = new FormData();
     formData.append('file', file);
 
-    fetch('http://139.162.53.137:3000/api/v1/file/upload', {
-      method: 'POST',
-      body: formData
-      })
-      .then((res)=>{
-        return res.json()
-      }).then((data)=>{
-        let item = {name: this.state.name, url: data.data[0].fileUrl}
-        this.setState(state => {
-          const list = state.documents;
-          list.pop();
-          list.push(item);
-          return {
-            list
-          };
-        });
+    try {
+      const res = await FetchApi.uploadFile(formData)
+      if (res.status === 200) {
+            console.log('data get', res)
+        
+      } else {
+            throw Error(res.message)
+      }
 
-        console.log('data', this.state.documents)
-      })
-      .catch((error) => console.log(error))
+    } catch (e) {
+
+      notification["error"]({message: "Error", description: e.message});
+      
+    }
+
+    // fetch('http://139.162.53.137:3000/api/v1/file/upload', {
+    //   method: 'POST',
+    //   body: formData
+    //   })
+    //   .then((res)=>{
+    //     return res.json()
+    //   }).then((data)=>{
+    //     let item = {name: this.state.name, url: data.data[0].fileUrl}
+    //     this.setState(state => {
+    //       const list = state.documents;
+    //       list.pop();
+    //       list.push(item);
+    //       return {
+    //         list
+    //       };
+    //     });
+
+    //     console.log('data', this.state.documents)
+    //   })
+    //   .catch((error) => console.log(error))
   }
 
   addNewFile = () => {
@@ -99,7 +113,7 @@ class UploadFile extends React.Component {
               // beforeUpload={this.beforeUpload}
               // method="PUT"
               listType="picture-card"
-              onRemove={this.onRemove(this.state.name)}
+              // onRemove={this.onRemove(this.state.name)}
               // fileList={fileList}
               // onPreview={this.handlePreview}
               onChange={this.handleChange}
