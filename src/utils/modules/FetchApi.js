@@ -19,10 +19,13 @@ const CommonCall = async (api, header) => {
     let headers = {
       'Content-Type': 'application/json',
     };
-
-    const head = {...header, headers};
-    let response = await fetchWithTimeOut(fetch(api, head));
-    console.log('response', response);
+    let head = {...header,headers};
+    let response;
+    if (api.includes("/api/v1/file/upload")){
+      response = await fetchWithTimeOut(fetch(api, header)); 
+    } else {
+      response = await fetchWithTimeOut(fetch(api, head));
+    }
     //maintance
     if (response.status === 502) {
       return {isSuccess: false, message: STRINGS.error_500};
@@ -66,10 +69,9 @@ const FetchApi = {
   uploadFile: (data) => {
     const header = {
       method: 'POST',
-      // mode: "cors",
       body: data
     };
-    const api = Api.uploadFile();
+    const api = Api.uploadFile(data);
     return CommonCall(api, header);
   },
 

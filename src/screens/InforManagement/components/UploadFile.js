@@ -44,7 +44,15 @@ class UploadFile extends React.Component {
       const res = await FetchApi.uploadFile(formData)
       if (res.status === 200) {
             console.log('data get', res)
-        
+        let item = {name: this.state.name, url: res.data[0].fileUrl}
+        this.setState(state => {
+          const list = state.documents;
+          list.pop();
+          list.push(item);
+          return {
+            list
+          };
+        });
       } else {
             throw Error(res.message)
       }
@@ -54,27 +62,6 @@ class UploadFile extends React.Component {
       notification["error"]({message: "Error", description: e.message});
       
     }
-
-    // fetch('http://139.162.53.137:3000/api/v1/file/upload', {
-    //   method: 'POST',
-    //   body: formData
-    //   })
-    //   .then((res)=>{
-    //     return res.json()
-    //   }).then((data)=>{
-    //     let item = {name: this.state.name, url: data.data[0].fileUrl}
-    //     this.setState(state => {
-    //       const list = state.documents;
-    //       list.pop();
-    //       list.push(item);
-    //       return {
-    //         list
-    //       };
-    //     });
-
-    //     console.log('data', this.state.documents)
-    //   })
-    //   .catch((error) => console.log(error))
   }
 
   addNewFile = () => {
