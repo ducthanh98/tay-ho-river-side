@@ -103,7 +103,7 @@ class Infor extends React.Component {
     return (
       <div>
         <Row>
-          <div style={{marginBottom: '5px'}}>
+          <Row>
             <Breadcrumb>
               <Breadcrumb.Item>
                 <a href="#">Quản lý toà nhà</a>
@@ -112,26 +112,28 @@ class Infor extends React.Component {
                 <a href="#">Quản lý thông tin</a>
               </Breadcrumb.Item>
             </Breadcrumb>
+          </Row>
+          <div style={{marginTop: '50px'}}>
+            <Form {...layout} name="nest-messages" onFinish={this.onFinish} id="form1" >
+              <Row>
+                <Col span={23}>
+                  <Tabs defaultActiveKey="1" >
+                    <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
+                      <InforForm />
+                    </TabPane>
+                    <TabPane tab="TÀI LIỆU" key="2">
+                      <Uploadfile 
+                        documents={this.state.documents}
+                      />
+                    </TabPane>
+                  </Tabs>
+                </Col>
+                <Col span={1}>
+                  <Button type="primary" htmlType="submit" form="form1">Lưu</Button>
+                </Col>
+              </Row>
+            </Form>
           </div>
-          <Form {...layout} name="nest-messages" onFinish={this.onFinish} id="form1" >
-            <Row>
-              <Col span={23}>
-                <Tabs defaultActiveKey="1" >
-                  <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
-                    <InforForm />
-                  </TabPane>
-                  <TabPane tab="TÀI LIỆU" key="2">
-                    <Uploadfile 
-                      documents={this.state.documents}
-                    />
-                  </TabPane>
-                </Tabs>
-              </Col>
-              <Col span={1}>
-                <Button type="primary" htmlType="submit" form="form1">Lưu</Button>
-              </Col>
-            </Row>
-          </Form>
         </Row>
       </div>
     );
