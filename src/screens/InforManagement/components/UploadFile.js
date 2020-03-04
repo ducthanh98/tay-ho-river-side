@@ -13,9 +13,8 @@ class UploadFile extends React.Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      // value: {name: '', url: ''},
       name: '',
-      fileList: [],
+      // fileList: [],
       newfile: true,
       documents: this.props.documents
     };
@@ -23,16 +22,12 @@ class UploadFile extends React.Component {
 
   handleCancel = () => this.setState({ previewVisible: false });
 
-  handleChange = ({ fileList }) => {
-    this.setState({ fileList })
-  };
+  // handleChange = ({ fileList }) => {
+  //   this.setState({ fileList })
+  // };
 
   handleChangeName = (e) => {
     this.setState({name: e.target.value});
-  }
-
-  onRemove = (e) => {
-    console.log('remove', e)
   }
 
   upLoad = async (file) => {
@@ -43,7 +38,6 @@ class UploadFile extends React.Component {
     try {
       const res = await FetchApi.uploadFile(formData)
       if (res.status === 200) {
-            console.log('data get', res)
         let item = {name: this.state.name, url: res.data[0].fileUrl}
         this.setState(state => {
           const list = state.documents;
@@ -62,6 +56,25 @@ class UploadFile extends React.Component {
       notification["error"]({message: "Error", description: e.message});
       
     }
+  }
+
+  onRemove = (e) => {
+    let docs = this.state.documents;
+    let index;
+    docs.forEach( (element,i) => {
+      if (element.url.includes(e.name.split(" ").join("-"))) {
+        index=i;
+        return index;
+      }
+    });
+
+    this.setState(state => {
+      const list = state.documents.splice(index,1);
+      return {
+        list
+      };
+    });
+
   }
 
   addNewFile = () => {
@@ -98,12 +111,11 @@ class UploadFile extends React.Component {
             <Upload
               action={this.upLoad}
               // beforeUpload={this.beforeUpload}
-              // method="PUT"
               listType="picture-card"
-              // onRemove={this.onRemove(this.state.name)}
+              onRemove={this.onRemove}
               // fileList={fileList}
               // onPreview={this.handlePreview}
-              onChange={this.handleChange}
+              // onChange={this.handleChange}
               customRequest={this.dummyRequest}
             >
               {this.renderUploadButton()}
@@ -111,18 +123,20 @@ class UploadFile extends React.Component {
           </div>
         </div>
       let input = this.state.documents.map((item, i) => 
-      <div key={i}>
+      <div key={i} style={{marginLeft: '6px'}}>
+        <h5>Tên file</h5>
         <Input style={{width: '105px'}} 
           placeholder="Input name"
           onChange={this.handleChangeName}
+          value={item.name}
         />
       </div>)
     return (
       <div>
         <Button type="primary" onClick={this.addNewFile}>New File</Button>
         <div>
-          <div style={{display: 'flex'}}>{input}</div>
-          {b}
+          <div style={{display: 'flex', paddingTop: '20px', marginBottom: '5px'}}>{input}</div>
+          <div style={{marginLeft: '5px'}}>{b}</div>
         </div>
       </div>
     );
