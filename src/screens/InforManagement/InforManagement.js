@@ -1,13 +1,10 @@
-import React from 'react'
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Row, Col, Tabs, Breadcrumb, Button, notification } from 'antd';
+import React from 'react';
 import Uploadfile from "./components/UploadFile";
 import InforForm from "./components/InforForm";
 import { FetchApi } from "../../utils/modules";
+import { Form, Button, Row, Col, Tabs, Breadcrumb, notification } from 'antd';
 
 const { TabPane } = Tabs;
-
 class Infor extends React.Component {
   constructor(props) {
     super(props)
@@ -63,49 +60,50 @@ class Infor extends React.Component {
     }
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      const start = Date.now();
-      this.setState( async prevState => {
-        let data = Object.assign({}, prevState.data);
-        data.officePhone = values.officePhone;                 
-        data.linkFanpage = values.linkFanpage;         
-        data.createdTime = start; 
-        data.address = values.address;  
-        data.Email = values.Email;             
-        data.documents = prevState.documents;
+  onFinish = values => {
+    const start = Date.now();
+    this.setState( async prevState => {
+      let data = Object.assign({}, prevState.data);
+      data.officePhone = values.officePhone;                 
+      data.linkFanpage = values.linkFanpage;         
+      data.createdTime = start; 
+      data.address = values.address;  
+      data.Email = values.Email;             
+      data.documents = prevState.documents;
 
-        try {
-          const res = await FetchApi.putInfo(data)
-          if (res.status === 200) {
-                console.log('ress', res.data)
-            } 
-          else {
-            throw Error(res.message)
-          }
-    
-        } catch (e) {
-    
-          notification["error"]({message: "Error", description: e.message});
-          
+      try {
+        const res = await FetchApi.putInfo(data)
+        if (res.status === 200) {
+              console.log('ress', res.data)
+          } 
+        else {
+          throw Error(res.message)
         }
-
-        return { data };                              
-      })
-      
-      if (!err) {
+  
+      } catch (e) {
+  
+        notification["error"]({message: "Error", description: e.message});
+        
       }
-    });
+
+      return { data };                              
+    })
   };
 
   render() {
+    const layout = {
+      labelCol: {
+        span: 8,
+      },
+      wrapperCol: {
+        span: 16,
+      },
+    };
 
-    const {form} = this.props
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="form1">
-          <Row>
+        <Row>
+          <div style={{marginBottom: '5px'}}>
             <Breadcrumb>
               <Breadcrumb.Item>
                 <a href="#">Quản lý toà nhà</a>
@@ -114,13 +112,13 @@ class Infor extends React.Component {
                 <a href="#">Quản lý thông tin</a>
               </Breadcrumb.Item>
             </Breadcrumb>
+          </div>
+          <Form {...layout} name="nest-messages" onFinish={this.onFinish} id="form1" >
             <Row>
               <Col span={23}>
                 <Tabs defaultActiveKey="1" >
                   <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
-                    <InforForm
-                      form={form}
-                    />
+                    <InforForm />
                   </TabPane>
                   <TabPane tab="TÀI LIỆU" key="2">
                     <Uploadfile 
@@ -133,13 +131,11 @@ class Infor extends React.Component {
                 <Button type="primary" htmlType="submit" form="form1">Lưu</Button>
               </Col>
             </Row>
-          </Row>
-        </Form>
+          </Form>
+        </Row>
       </div>
     );
   }
 }
 
-const WrappedInfor = Form.create()(Infor)
-
-export default WrappedInfor;
+export default Infor;
