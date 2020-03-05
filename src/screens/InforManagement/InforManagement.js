@@ -113,7 +113,7 @@ class Infor extends React.Component {
               </Breadcrumb.Item>
             </Breadcrumb>
           </Row>
-          <div style={{marginTop: '50px'}}>
+          <div style={{marginTop: '30px'}}>
             <Form {...layout} name="nest-messages" onFinish={this.onFinish} id="form1" >
               <Row>
                 <Col span={23}>
