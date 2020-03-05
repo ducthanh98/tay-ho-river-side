@@ -39,19 +39,19 @@ const LoginForm = props => {
             rules:[
                     {
                         required: true,
-                        message: 'Please input your email!',
+                        message: 'Vui lòng nhập email',
                     }
             ],
             render:<Input/>,
         },
         {
             key:1,
-            label:'Password',
+            label:'Mật khẩu',
             name:'password',
             rules:[
                 {
                     required: true,
-                    message: 'Please input your password!',
+                    message: 'Vui lòng nhập mật khẩu',
                 }
             ],
             render:<Input.Password/>
@@ -74,7 +74,7 @@ const LoginForm = props => {
   const onFinish = async values => {
     try {
 
-      await LoadingService.setAndBroadcast(true);
+      LoadingService.setAndBroadcast(true);
       const res = await FetchApi.login(values)
 
 

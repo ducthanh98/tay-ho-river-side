@@ -48,7 +48,7 @@ const FetchApi = {
       mode: "cors",
       body: JSON.stringify(data)
     };
-    const api = Api.login();
+    const api = Api.login;
     return CommonCall(api, header);
   },
   getNotifications: (page) => {
@@ -56,6 +56,20 @@ const FetchApi = {
     const api = Api.notification(page);
     return CommonCall(api, header);
   },
+  getListReceiver:(page)=>{
+    const header = {method: 'GET'};
+    const api = Api.order(page);
+    return CommonCall(api, header);
+  },
+  createNotification:(data)=>{
+    const header = {
+      method: 'POST',
+      mode: "cors",
+      body: JSON.stringify(data)
+    };
+    const api = Api.createNotification;
+    return CommonCall(api, header);
+  }
 };
 
 export {FetchApi};

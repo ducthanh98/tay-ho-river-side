@@ -1,5 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Modal, Button,Input,Row, Col ,Table } from 'antd';
+import {FetchApi} from "../../../utils/modules";
+import {LoadingService} from "../../../services/loadingService";
 
 const styles = {
     selectBtn:{
@@ -11,110 +13,21 @@ const styles = {
 
 const ListReceiverModal =(props)=> {
         const [selectedRowKeys,setSelectedRowKeys] = useState([]);
+        const currentPageRef = useRef(0);
 
-        const dataSource = [
-            {
-                key: '1',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '2',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '3',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '4',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '5',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '6',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '7',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-            {
-                key: '8',
-                name: 'John Brown',
-                tel:'0918279888' ,
-                address: 'New York No. 1 Lake Park',
-                apartment_name: '1020',
-                floor:10,
-                price:1260,
-                pay:'Vay vốn',
-                date:'13/02/2020'
-            },
-
-        ];
+        const [dataSource,setDataSource]= useState([]);
 
         const columns = [
             {
                 title: 'Người mua',
-                dataIndex: 'name',
-                key: 'name',
+                dataIndex: 'userName',
+                key: 'userName',
                 render: text => <p className={'text-bold'}>{text}</p>,
             },
             {
                 title: 'Điện thoại',
-                dataIndex: 'tel',
-                key: 'tel',
+                dataIndex: 'phone',
+                key: 'phone',
                 render: text => <p >{text}</p>,
             },
             {
@@ -125,15 +38,67 @@ const ListReceiverModal =(props)=> {
             },
             {
                 title:'Tên căn hộ',
-                dataIndex:'apartment_name',
-                key:'apartment_name',
+                dataIndex:'apartmentType',
+                key:'apartmentType',
                 render: text => <p className={'text-bold'}>{text}</p>,
             }
         ];
 
+        const loadListReceiver = async ()=>{
+            if(currentPageRef.current < 0) return;
+            LoadingService.setAndBroadcast(true);
+
+
+            const res =  await FetchApi.getListReceiver(currentPageRef.current)
+
+            if(res.nextPage){
+                currentPageRef.current = currentPageRef.current + 1;
+            } else {
+                currentPageRef.current = -1;
+            }
+
+            setDataSource(dataSource.concat(res.data));
+            LoadingService.setAndBroadcast(false);
+
+
+        }
+
+
         useEffect(()=>{
-            setSelectedRowKeys(props.listReceiver.map(x => x.key))
+            setSelectedRowKeys(props.listReceiver.map(x => x.id))
         },[props.listReceiver])
+
+
+        useEffect(()=>{
+            loadListReceiver()
+        },[])
+
+
+        useEffect(()=>{
+            let modalScrollEvent ;
+            if(props.showModal){
+
+            modalScrollEvent = setTimeout(()=>{
+
+
+                const modalBody = document.querySelector('.list-receiver .ant-modal-body')
+                modalBody.addEventListener('scroll',()=>{
+
+
+                        if(modalBody.scrollTop === modalBody.scrollHeight - modalBody.clientHeight) {
+                            loadListReceiver()
+                        }
+
+
+                    })
+            })
+
+            }
+
+            return ()=> clearTimeout(modalScrollEvent);
+
+        },[props.showModal])
+
 
         const rowSelection = {
             selectedRowKeys,
@@ -141,14 +106,17 @@ const ListReceiverModal =(props)=> {
                 props.setListReceiver(selectedRows)
             },
         };
+
+
         return (
             <Modal
+                className="list-receiver"
                 visible={props.showModal}
                 title="Danh sách người nhận"
                 onCancel={()=>props.handleShowModal(false)}
                 footer=''
                 width={'800px'}
-                bodyStyle={{maxHeight:"450px",overflow:'scroll'}}
+                bodyStyle={{maxHeight:"450px",minHeight:"450px",overflow:'scroll'}}
             >
                 <Row type="flex" justify="space-between">
                     <Col span={10}>
@@ -159,7 +127,8 @@ const ListReceiverModal =(props)=> {
                     </Col>
                 </Row>
                 <br/>
-                <Table rowSelection={rowSelection} dataSource={dataSource} columns={columns} />;
+                <Table pagination={false} rowKey={'id'} rowSelection={rowSelection} dataSource={dataSource} columns={columns} />
+
             </Modal>
         );
 }

@@ -1,4 +1,8 @@
 export const NotificationDetailStyles = {
+        notiWrap:{
+          marginLeft: '57px',
+          marginTop:'20px'
+        },
         notiHeader:{
             fontWeight:'bold',
             fontSize:'15px',

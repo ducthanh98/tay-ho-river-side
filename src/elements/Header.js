@@ -1,11 +1,8 @@
 import Layout from "antd/es/layout";
-import {Avatar, Badge, Menu,Dropdown} from "antd";
-import React, {useEffect, useState} from "react";
+import {Avatar} from "antd";
+import React from "react";
 import {AuthService} from "../services/authService";
-import {BellTwoTone} from '@ant-design/icons';
-import {FetchApi} from "../utils/modules";
 import {withRouter} from 'react-router-dom';
-import {NotificationService} from "../services/notificationService";
 const { Header } = Layout;
 
 const styles ={
@@ -52,77 +49,58 @@ const styles ={
 
 }
 const CustomHeader = (props)=>{
-    const [listNoti,setListNoti] = useState([]);
-    const [nextPage,setNextPage] = useState(0);
+    // const [listNoti,setListNoti] = useState([]);
 
-    const loadNotify = ()=>{
-        FetchApi.getNotifications(nextPage)
-            .then((res)=>{
+    // const renderMenu = (
+    //
+    //         <Menu style={styles.notifyWrap} id='noti'>
+    //             <Menu.Item key="-1">
+    //                 <span style={styles.notiHeader}>Thông báo</span>
+    //             </Menu.Item>
+    //             <Menu.Divider/>
+    //             {
+    //                 listNoti.map((noti,index) => (
+    //                     <Menu.Item key={noti.id} onClick={()=>navigate(index)}>
+    //                         <span style={styles.notiContent}>{noti.title} {noti.id}</span>
+    //                         <p style={styles.notiTime}>{new Date(noti.createdTime).toLocaleString()}</p>
+    //                     </Menu.Item>
+    //                 ))
+    //             }
+    //             <Menu.Divider/>
+    //
+    //         </Menu>
+    //
+    // );
 
-                if(res.nextPage === ''){
-                    setNextPage(nextPage + 1)
-                } else {
-                    setNextPage(-1)
-                }
-
-                setListNoti(listNoti.concat(res.data));
-            })
-
-    }
-
-
-    useEffect(loadNotify,[])
-
-
-
-    const navigate = (index)=> {
-        NotificationService.set(listNoti[index])
-        props.history.push('/notification-detail')
-    }
-
-    const renderSeeMore = ()=>{
-        if(nextPage > 0){
-            return (
-                    <Menu.Item style={styles.notiFooter} key="see-more" onClick={()=>loadNotify()}>
-                        <span >Xem thêm</span>
-                    </Menu.Item>
-            )
-        }
-        return;
-    }
-
-    const renderMenu = (
-
-            <Menu style={styles.notifyWrap}>
-                <Menu.Item key="0">
-                    <span style={styles.notiHeader}>Thông báo</span>
-                </Menu.Item>
-                <Menu.Divider/>
-                {
-                    listNoti.map((noti,index) => (
-                        <Menu.Item key={noti.id} onClick={()=>navigate(index)}>
-                            <span style={styles.notiContent}>{noti.title}</span>
-                            <p style={styles.notiTime}>{new Date(noti.createdTime).toLocaleString()}</p>
-                        </Menu.Item>
-                    ))
-                }
-                <Menu.Divider/>
-
-                {renderSeeMore()}
-            </Menu>
-
-    );
+    // const addEventListener = (visible)=>{
+    //     if(visible){
+    //         const noti = document.getElementById('noti');
+    //         noti.addEventListener('scroll',(event)=>{
+    //
+    //
+    //             if(noti.scrollTop === noti.scrollHeight - noti.clientHeight) {
+    //                 loadNotify()
+    //             }
+    //
+    //
+    //         })
+    //     }
+    // }
 
     const {userName} = AuthService.get();
 
 
     return(
                     <Header style={styles.headerWrap}>
-                        <Dropdown  overlay={renderMenu} trigger={['click']}>
-                            <Badge count={1} className="ant-dropdown-link">
-                                <BellTwoTone style={{fontSize:24}}/>
-                            </Badge>
-                        </Dropdown>
+                        {/*<Dropdown overlay={renderMenu}*/}
+                        {/*          trigger={['click']}*/}
+                        {/*          onVisibleChange={(e)=>{*/}
+                        {/*              setTimeout(()=>addEventListener(e))*/}
+                        {/*          }}>*/}
+                        {/*    <Badge count={1} className="ant-dropdown-link">*/}
+                        {/*        <BellTwoTone style={{fontSize:24}}/>*/}
+                        {/*    </Badge>*/}
+                        {/*</Dropdown>*/}
 
                         <span style={styles.username}>{userName}</span>
                         <Avatar style={styles.avatar} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />

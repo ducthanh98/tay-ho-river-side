@@ -10,19 +10,27 @@ const Login = () => {
   const [userInfo, setUserInfo] = useState(AuthService.get());
 
   useEffect(() => {
+
+
     AuthService.onChange("login", () => {
       setUserInfo(AuthService.get());
     });
+
+
     return () => {
       AuthService.deleteKey("login");
     };
+
+
   }, []);
 
   const renderRedirect = () => {
+
     if (userInfo) {
       return <Redirect to={"/"} />;
     }
     return null;
+
   };
 
   return (

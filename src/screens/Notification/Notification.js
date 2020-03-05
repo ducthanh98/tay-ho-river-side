@@ -1,54 +1,75 @@
 import React, {useState} from 'react';
-import {Input,Button,Form} from "antd";
+import {Input, Button, Form, notification} from "antd";
 import {NotificationStyles} from './NotificationStyles';
 import ListReceiverModal from "./components/ListReceiverModal";
 import ListReceiver from "./components/ListSelected";
+import {LoadingService} from "../../services/loadingService";
+import {FetchApi} from "../../utils/modules";
+import {withRouter} from "react-router-dom";
 
-const Notification = ()=> {
+const Notification = (props)=> {
     const [listReceiver,setListReceiver] = useState([])
     const [showModal,setShowModal] = useState(false)
-
-    const renderReceiver = ()=>(
-        <>
-            <p style={NotificationStyles.comboboxLabel}>Người nhận</p>
-            <ListReceiver setListReceiver={setListReceiver} listReceiver={listReceiver} handleShowModal={setShowModal} />
-        </>
-    );
-
-    const renderTitle = ()=>(
-        <>
-            <p style={NotificationStyles.comboboxLabel}>Tiêu đề</p>
-            <Input style={{ width: '100%' }} />
-        </>
-    );
-
-    const renderDescription = ()=>(
-        <>
-            <p style={NotificationStyles.comboboxLabel}>Nội dung</p>
-            <Input.TextArea  style={{ width: '100%',height:'100px' }} />
-        </>
-    )
 
     const formItems =[
         {
             key:0,
-            name:'receiver',
-            render: renderReceiver()
+            label:'Người nhận',
+            render: <ListReceiver setListReceiver={setListReceiver} listReceiver={listReceiver} handleShowModal={setShowModal} />
         },
         {
             key:1,
             name:'title',
-            render:renderTitle()
+            label:'Tiêu đề',
+            rules:[
+                {
+                    required: true,
+                    message: 'Vui lòng nhập tiêu đề',
+                }
+            ],
+            render:<Input style={{ width: '100%' }} />
         },
         {
             key:2,
             name:'description',
-            render: renderDescription()
+            label:'Mô tả',
+            rules:[
+                {
+                    required: true,
+                    message: 'Vui lòng nhập mô tả',
+                }
+            ],
+            render: <Input.TextArea  style={{ width: '100%',height:'100px' }} />
         }
     ]
 
-    const onFinish = value =>{
-        console.log(value);
+    const onFinish = async values =>{
+        try {
+
+            values.type = listReceiver.length ? 'some' : 'all';
+            values.deviceId = listReceiver.map(v => v.id);
+
+
+            LoadingService.setAndBroadcast(true);
+            const res = await FetchApi.createNotification(values)
+
+
+            if (res.status === 200) {
+                props.history.push('/notification-detail',res.data)
+
+            } else {
+                throw Error(res.message)
+            }
+
+
+        } catch (e) {
+
+            notification["error"]({message: "Error", description: e.message});
+
+        } finally {
+            LoadingService.setAndBroadcast(false);
+        }
+
     }
 
     return (
@@ -58,12 +79,16 @@ const Notification = ()=> {
                 <Form onFinish={onFinish}>
                     {
                         formItems.map(item => (
-                            <Form.Item
-                            key={item.key}
-                            name={item.name}
-                            >
-                                {item.render}
-                            </Form.Item>
+                            <div key={item.key}>
+                                <p style={NotificationStyles.comboboxLabel}>{item.label}</p>
+
+                                <Form.Item
+                                name={item.name}
+                                rules={item.rules}
+                                >
+                                    {item.render}
+                                </Form.Item>
+                            </div>
                         ))
                     }
                     <Button htmlType={"submit"} style={NotificationStyles.sendBtn} >Gửi đi</Button>
@@ -79,4 +104,4 @@ const Notification = ()=> {
     );
 }
 
-export default Notification;
+export default withRouter(Notification);

@@ -34,7 +34,7 @@ const styles = {
     }
 }
 
-const ListReceiver =(props)=> {
+const ListSelected =(props)=> {
     const removeReceiver = (index)=>{
         const list = [...props.listReceiver]
         list.splice(index,1);
@@ -48,8 +48,8 @@ const ListReceiver =(props)=> {
                         props.listReceiver.map((value,index) =>{
 
                             return (
-                                <li key={value.key} style={styles.li}>
-                                    {value.name}
+                                <li key={value.id} style={styles.li}>
+                                    {value.userName}
 
                                     <CloseOutlined onClick={()=>removeReceiver(index)} />
                                 </li>
@@ -64,4 +64,4 @@ const ListReceiver =(props)=> {
         );
 }
 
-export default ListReceiver;
+export default ListSelected;

@@ -20,9 +20,6 @@ const Loading = () => {
   const [isLoading, setLoading] = useState(LoadingService.get());
 
   useEffect(() => {
-    //TODO: phần này e k cần sửa, nhưng cần để ý 1 chút chỗ này,
-    // ví dụ khi click vào button submit sẽ chỉ hiển thị loading của button đó, nếu như muốn dùng chung component loading này
-    // thì sẽ dẫn đến chỉ có service cuối cùng được gọi do cái "key" đang k unique, mà bị compoent sau khi đè component trước
     LoadingService.onChange("loading", () => {
       setLoading(LoadingService.get());
     });
@@ -31,15 +28,8 @@ const Loading = () => {
       LoadingService.deleteKey("loading");
     };
   }, []);
-  //tránh sử dụng ternary operator trong lúc render
-  //nên sử dụng if() để clear code hơn
-  // return (
-  //     <>
-  //         {
-  //             isLoading &&
-  //         }
-  //     </>
-  // );
+
+  
   if (isLoading) {
     return (
       <div style={styles.background}>
