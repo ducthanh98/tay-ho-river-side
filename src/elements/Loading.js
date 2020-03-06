@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Spin } from "antd";
-import { LoadingService } from "../services/loadingService";
+import { LoadingService } from "../services";
 
 const styles = {
   background: {
@@ -29,7 +29,6 @@ const Loading = () => {
     };
   }, []);
 
-  
   if (isLoading) {
     return (
       <div style={styles.background}>
