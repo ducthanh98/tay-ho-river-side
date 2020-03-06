@@ -1,105 +1,102 @@
-import React from 'react';
+import React from "react";
 import Uploadfile from "./components/UploadFile";
 import InforForm from "./components/InforForm";
 import { FetchApi } from "../../utils/modules";
-import { Form, Button, Row, Col, Tabs, Breadcrumb, notification } from 'antd';
+import { Form, Button, Row, Col, Tabs, Breadcrumb, notification } from "antd";
 
 const { TabPane } = Tabs;
 class Infor extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       value: "",
       documents: [],
       data: {
-        id: '1',
-        name: 'T Oerr',
-        description: 'dfdf',
-        officePhone: '',
-        linkFanpage: '',
-        createdTime: '',
-        address: '',
+        id: "1",
+        name: "T Oerr",
+        description: "dfdf",
+        officePhone: "",
+        linkFanpage: "",
+        createdTime: "",
+        address: "",
         documents: []
-      },
-    }
+      }
+    };
   }
 
   componentDidMount() {
-
     this.getInfor();
-
   }
 
   getInfor = async () => {
     try {
-      const res = await FetchApi.getInforManager()
+      const res = await FetchApi.getInforManager();
       if (res.status === 200) {
         this.setState(prevState => {
           let data = Object.assign({}, prevState.data);
           data.id = res.data.id;
           data.name = res.data.name;
-          data.description = res.data.description;           
-          data.officePhone = res.data.officePhone;                     
-          data.linkFanpage = res.data.linkFanpage;           
+          data.description = res.data.description;
+          data.officePhone = res.data.officePhone;
+          data.linkFanpage = res.data.linkFanpage;
           data.createdTime = res.data.createdTime;
-          data.address = res.data.address;                 
-          data.documents = res.data.documents;           
+          data.address = res.data.address;
+          data.documents = res.data.documents;
 
-          return { data };                             
-        })
-
+          return { data };
+        });
       } else {
-            throw Error(res.message)
+        throw Error(res.message);
       }
-
     } catch (e) {
-
-      notification["error"]({message: "Error", description: e.message});
-      
+      notification["error"]({ message: "Error", description: e.message });
     }
-  }
+  };
 
   onFinish = values => {
+    //FIXME: không xử lý dữ liệu trong hàm setState
+    //luồng sẽ là:
+    // - setState loading
+    // - call api
+    // - xử lý ngoại lệ
+    // setState loading
     const start = Date.now();
-    this.setState( async prevState => {
-      let data = Object.assign({}, prevState.data);
-      data.officePhone = values.officePhone;                 
-      data.linkFanpage = values.linkFanpage;         
-      data.createdTime = start; 
-      data.address = values.address;  
-      data.Email = values.Email;             
+    this.setState(async prevState => {
+      let data = Object.assign({}, prevState.data); //FIXME: k cần thiết
+      data.officePhone = values.officePhone;
+      data.linkFanpage = values.linkFanpage;
+      data.createdTime = start;
+      data.address = values.address;
+      data.Email = values.Email;
       data.documents = prevState.documents;
 
       try {
-        const res = await FetchApi.putInfo(data)
+        const res = await FetchApi.putInfo(data);
         if (res.status === 200) {
-              console.log('ress', res.data)
-          } 
-        else {
-          throw Error(res.message)
+          console.log("ress", res.data);
+        } else {
+          throw Error(res.message);
         }
-  
       } catch (e) {
-  
-        notification["error"]({message: "Error", description: e.message});
-        
+        notification["error"]({ message: "Error", description: e.message });
       }
 
-      return { data };                              
-    })
+      return { data };
+    });
   };
 
   render() {
+    //FIXME:  dữ liệu k khai báo trong render
     const layout = {
       labelCol: {
-        span: 8,
+        span: 8
       },
       wrapperCol: {
-        span: 16,
-      },
+        span: 16
+      }
     };
-
+    //FIXME: nếu được thì k sử dụng các thẻ div như thế này
     return (
       <div>
         <Row>
@@ -113,23 +110,28 @@ class Infor extends React.Component {
               </Breadcrumb.Item>
             </Breadcrumb>
           </Row>
-          <div style={{marginTop: '30px'}}>
-            <Form {...layout} name="nest-messages" onFinish={this.onFinish} id="form1" >
+          <div style={{ marginTop: "30px" }}>
+            <Form
+              {...layout}
+              name="nest-messages"
+              onFinish={this.onFinish}
+              id="form1"
+            >
               <Row>
                 <Col span={23}>
-                  <Tabs defaultActiveKey="1" >
+                  <Tabs defaultActiveKey="1">
                     <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
                       <InforForm />
                     </TabPane>
                     <TabPane tab="TÀI LIỆU" key="2">
-                      <Uploadfile 
-                        documents={this.state.documents}
-                      />
+                      <Uploadfile documents={this.state.documents} />
                     </TabPane>
                   </Tabs>
                 </Col>
                 <Col span={1}>
-                  <Button type="primary" htmlType="submit" form="form1">Lưu</Button>
+                  <Button type="primary" htmlType="submit" form="form1">
+                    Lưu
+                  </Button>
                 </Col>
               </Row>
             </Form>
