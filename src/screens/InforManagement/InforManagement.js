@@ -21,6 +21,14 @@ class Infor extends React.Component {
         createdTime: "",
         address: "",
         documents: []
+      },
+      layout: {
+        labelCol: {
+          span: 8
+        },
+        wrapperCol: {
+          span: 16
+        },
       }
     };
   }
@@ -54,90 +62,75 @@ class Infor extends React.Component {
     }
   };
 
-  onFinish = values => {
-    //FIXME: không xử lý dữ liệu trong hàm setState
-    //luồng sẽ là:
-    // - setState loading
-    // - call api
-    // - xử lý ngoại lệ
-    // setState loading
+  onFinish = async values => {
+
     const start = Date.now();
-    this.setState(async prevState => {
-      let data = Object.assign({}, prevState.data); //FIXME: k cần thiết
+    console.log('doc', this.state.documents)
+    let data
+    this.setState( prevState => {
+      data = Object.assign({}, prevState.data);
       data.officePhone = values.officePhone;
       data.linkFanpage = values.linkFanpage;
       data.createdTime = start;
       data.address = values.address;
       data.Email = values.Email;
       data.documents = prevState.documents;
-
-      try {
-        const res = await FetchApi.putInfo(data);
-        if (res.status === 200) {
-          console.log("ress", res.data);
-        } else {
-          throw Error(res.message);
-        }
-      } catch (e) {
-        notification["error"]({ message: "Error", description: e.message });
-      }
-
-      return { data };
+      return data ;
     });
+
+    try {
+      const res = await FetchApi.putInfo(data);
+      if (res.status === 200) {
+        console.log("ress", res.data);
+      } else {
+        throw Error(res.message);
+      }
+    } catch (e) {
+      notification["error"]({ message: "Error", description: e.message });
+    }
+
   };
 
   render() {
-    //FIXME:  dữ liệu k khai báo trong render
-    const layout = {
-      labelCol: {
-        span: 8
-      },
-      wrapperCol: {
-        span: 16
-      }
-    };
-    //FIXME: nếu được thì k sử dụng các thẻ div như thế này
     return (
-      <div>
+      <Row>
         <Row>
-          <Row>
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <a href="#">Quản lý toà nhà</a>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <a href="#">Quản lý thông tin</a>
-              </Breadcrumb.Item>
-            </Breadcrumb>
-          </Row>
-          <div style={{ marginTop: "30px" }}>
-            <Form
-              {...layout}
-              name="nest-messages"
-              onFinish={this.onFinish}
-              id="form1"
-            >
-              <Row>
-                <Col span={23}>
-                  <Tabs defaultActiveKey="1">
-                    <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
-                      <InforForm />
-                    </TabPane>
-                    <TabPane tab="TÀI LIỆU" key="2">
-                      <Uploadfile documents={this.state.documents} />
-                    </TabPane>
-                  </Tabs>
-                </Col>
-                <Col span={1}>
-                  <Button type="primary" htmlType="submit" form="form1">
-                    Lưu
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          </div>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="#">Quản lý toà nhà</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="#">Quản lý thông tin</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
         </Row>
-      </div>
+        <div style={{ marginTop: "30px" }}>
+          <Form
+            {...this.state.layout}
+            name="nest-messages"
+            onFinish={this.onFinish}
+            id="form1"
+          >
+            <Row>
+              <Col span={23}>
+                <Tabs defaultActiveKey="1">
+                  <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
+                    <InforForm />
+                  </TabPane>
+                  <TabPane tab="TÀI LIỆU" key="2">
+                    <Uploadfile documents={this.state.documents} />
+                  </TabPane>
+                </Tabs>
+              </Col>
+              <Col span={1}>
+                <Button type="primary" htmlType="submit" form="form1">
+                  Lưu
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      </Row>
     );
   }
 }

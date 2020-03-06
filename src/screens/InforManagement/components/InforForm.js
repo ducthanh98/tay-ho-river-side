@@ -1,71 +1,48 @@
 import React from "react";
 import { Form, Input, Row, Col } from "antd";
-import "antd/dist/antd.css"; //FIXME: file này đã được import từ file App rồi
 
 const Infor = () => {
-  //FIXME: og nên sử dụng array để khai báo form rồi sau đó sử dung map để render form đó ,phần này og có thể tham khảo từ Thanh
-  return (
-    <div>
-      <Row gutter={[0, 6]}>
-        <Col span={18}>
+
+    const children = [
+      {
+      name:"officePhone",
+      label:"Số điện thoại"
+      },
+      {
+        name:"Email",
+        label:"Email"
+      },
+      {
+        name:"LinkFanpage",
+        label:"Link fanpage facebook"
+      },
+      {
+        name:"address",
+        label:"Địa chỉ"
+      }
+    ];
+
+    let form =  children.map((e,i) =>
+      <Row gutter={[0, 6]} key={i}>
+        <Col span={24}>
           <Form.Item
-            name={"officePhone"}
-            label="Số điện thoại"
+            name={e.name}
+            label={e.label}
             rules={[
               {
                 required: true,
-                message: "Input something!"
-              }
+                message: 'Input something!',
+              },
             ]}
           >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={18}>
-          <Form.Item
-            name={"email"}
-            label="Email"
-            rules={[
-              {
-                required: true,
-                message: "Input something!"
-              }
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={18}>
-          <Form.Item
-            name={"linkFanpage"}
-            label="Link fanpage facebook"
-            rules={[
-              {
-                required: true,
-                message: "Input something!"
-              }
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={18} push={0}>
-          <Form.Item
-            name={"address"}
-            label="Địa chỉ"
-            rules={[
-              {
-                required: true,
-                message: "Input something!"
-              }
-            ]}
-          >
-            <Input />
+            <Input placeholder="Input something!" />
           </Form.Item>
         </Col>
       </Row>
-    </div>
-  );
+    )
+
+  return form;
+
 };
 
 export default Infor;
