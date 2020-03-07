@@ -56,9 +56,9 @@ const FetchApi = {
     const api = Api.notification(page);
     return CommonCall(api, header);
   },
-  getListReceiver:(page)=>{
+  getListReceiver:(page,keyword)=>{
     const header = {method: 'GET'};
-    const api = Api.order(page);
+    const api = keyword ?  Api.searchOrder(page,keyword) : Api.allOrder(page)
     return CommonCall(api, header);
   },
   createNotification:(data)=>{

@@ -14,8 +14,10 @@ const styles = {
 const ListReceiverModal = props => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const currentPageRef = useRef(0);
+  const keywordRef = useRef('');
 
   const [dataSource, setDataSource] = useState([]);
+  const dataSourceRef = useRef([]);
 
   const columns = [
     {
@@ -44,11 +46,11 @@ const ListReceiverModal = props => {
     }
   ];
 
-  const loadListReceiver = useCallback(async () => {
+  const loadListReceiver = async () => {
     if (currentPageRef.current < 0) return;
     LoadingService.setAndBroadcast(true);
 
-    const res = await FetchApi.getListReceiver(currentPageRef.current);
+    const res = await FetchApi.getListReceiver(currentPageRef.current,keywordRef.current);
 
     if (res.nextPage) {
       currentPageRef.current = currentPageRef.current + 1;
@@ -56,9 +58,11 @@ const ListReceiverModal = props => {
       currentPageRef.current = -1;
     }
 
-    setDataSource(dataSource.concat(res.data));
+    dataSourceRef.current = dataSourceRef.current.concat(res.data)
+
+    setDataSource(dataSourceRef.current)
     LoadingService.setAndBroadcast(false);
-  });
+  };
 
   useEffect(() => {
     setSelectedRowKeys(props.listReceiver.map(x => x.id));
@@ -66,7 +70,7 @@ const ListReceiverModal = props => {
 
   useEffect(() => {
     loadListReceiver();
-  }, [loadListReceiver]);
+  }, []);
 
   useEffect(() => {
     //FIXME: nếu sử dụng biến modalScrollEvent trong scope của  useEffect thì thực ra
@@ -90,7 +94,7 @@ const ListReceiverModal = props => {
     }
 
     return () => clearTimeout(modalScrollEvent);
-  }, [loadListReceiver, props.showModal]);
+  }, [props.showModal]);
 
   const rowSelection = {
     selectedRowKeys,
@@ -98,6 +102,18 @@ const ListReceiverModal = props => {
       props.setListReceiver(selectedRows);
     }
   };
+
+  const search = ()=>{
+    const {value} = document.getElementById('keyword');
+
+
+    keywordRef.current = value;
+    currentPageRef.current = 0;
+    dataSourceRef.current=[];
+
+
+    loadListReceiver();
+  }
 
   return (
     <Modal
@@ -111,10 +127,10 @@ const ListReceiverModal = props => {
     >
       <Row type="flex" justify="space-between">
         <Col span={10}>
-          <Input placeholder="Tìm kiếm" />
+          <Input id='keyword' placeholder="Tìm kiếm"/>
         </Col>
         <Col span={4}>
-          <Button style={styles.selectBtn}>Chọn</Button>
+          <Button onClick={search} style={styles.selectBtn}>Chọn</Button>
         </Col>
       </Row>
       <br />
