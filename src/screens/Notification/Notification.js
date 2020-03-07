@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import {Input, Button, Form, notification} from "antd";
 import {NotificationStyles} from './NotificationStyles';
 import ListReceiverModal from "./components/ListReceiverModal";
