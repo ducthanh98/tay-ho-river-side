@@ -1,7 +1,6 @@
 import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { Upload, Input, Button, notification } from "antd";
-import "antd/dist/antd.css"; //FIXME: đã được import từ trước
 import "./Upload.css";
 import { FetchApi } from "../../../utils";
 
@@ -14,17 +13,12 @@ class UploadFile extends React.Component {
       previewVisible: false,
       previewImage: "",
       name: "",
-      // fileList: [],
       newfile: true,
       documents: this.props.documents
     };
   }
 
   handleCancel = () => this.setState({ previewVisible: false });
-
-  // handleChange = ({ fileList }) => {
-  //   this.setState({ fileList })
-  // };
 
   handleChangeName = e => {
     this.setState({ name: e.target.value });
@@ -39,14 +33,21 @@ class UploadFile extends React.Component {
       const res = await FetchApi.uploadFile(formData);
       if (res.status === 200) {
         let item = { name: this.state.name, url: res.data[0].fileUrl };
-        this.setState(state => {
-          const list = state.documents;
-          list.pop();
-          list.push(item);
-          return {
-            list
-          };
-        });
+        let { documents } = this.state;
+        console.log('document', documents)
+        documents.pop();
+        console.log('document1', documents)
+        documents.push(item)
+        console.log('document2', documents)
+        this.setState({documents: [...documents]})
+        // this.setState(state => {
+        //   const list = state.documents;
+        //   list.pop();
+        //   list.push(item);
+        //   return {
+        //     list
+        //   };
+        // });
       } else {
         throw Error(res.message);
       }
@@ -74,65 +75,37 @@ class UploadFile extends React.Component {
   };
 
   addNewFile = () => {
-    //FIXME: không nên gọi trực tiếp state thế này
-    //luồng của nó là:
-    // - khai báo biến, state
-    // - thay đổi state
-    //gọi setState để render lại
 
-    //FIXME: tại sao thêm file mới mà newfile lại là false
-    // this.setState({ newfile: false });
-    //FIXME: với các biến không đổi giá trị thì sử dụng biến const thay cho let
     // let value = {};
     // this.setState(state => {
-    //phần này og xem lại lần trước t giải thích về chỗ này rồi
+    // // phần này og xem lại lần trước t giải thích về chỗ này rồi
     //   const list = state.documents.push(value);
     //   return {
     //     list
     //   };
     // });
 
-    //vidu
-    const { newfile } = this.state;
-    // tránh trường hợp khi bấm 2 lần liên tiếp
-    if (newfile) return;
-    this.setState({ newfile: true });
-    //init empty object
-    //TODO: kiểm tra lại liệu có thực sự cần object rỗng thế này không
-    this.state.documents.push({});
-    this.setState({ newfile: false });
+    let { newfile, documents } = this.state;
+    newfile = false;
+    this.setState({ newfile: newfile });
+    documents.push({})
+    this.setState({ documents: [...documents] });
   };
 
   renderUploadButton = () => {
-    //FIXME: không nên gọi trực tiếp state thế này
-    //luồng của nó là:
-    // - khai báo biến, state
-    // - check điều kiện theo biến state
-
-    //vidu
     const { newfile } = this.state;
     if (newfile) {
       return null;
     }
-    //hạn chế dùng thẻ div, ưu tiên sử dụng các thẻ trong ant design
     return (
       <div>
         <UploadOutlined />
         <div>Up Image</div>
       </div>
     );
-
-    // if (this.state.newfile) return null;
-    // return (
-    //   <div>
-    //     <UploadOutlined />
-    //     <div>Up Image</div>
-    //   </div>
-    // );
   };
   dummyRequest = ({ file, onSuccess }) => {
-    //FIXME: mục đích của nó là gì thế
-    //với hiện tại chưa quản lý các biến timeout được tạo ra sẽ dẫn đến leak memory, ảnh hưởng performancce
+    //FIXME: để disable auto post của Upload trong antd
 
     setTimeout(() => {
       onSuccess("ok");
@@ -141,8 +114,7 @@ class UploadFile extends React.Component {
 
   render() {
     //FIXME: không khai báo trong render, render không có mục đích để làm việc này, khai báo nó ở bên ngoài
-    //og nên đặt lại biến sao cho dễ hiểu, miêu tả đúng mục đích
-    let b = (
+    let buttonUpload = (
       <div>
         <div className="clearfix">
           <Upload
@@ -183,11 +155,9 @@ class UploadFile extends React.Component {
           <div
             style={{ display: "flex", paddingTop: "20px", marginBottom: "5px" }}
           >
-            {/* //FIXME: hàm render array sẽ được gọi ở đây  */}
             {input}
           </div>
-          {/* FIXME: phần này cần sửa lại  */}
-          <div style={{ marginLeft: "5px" }}>{b}</div>
+          <div style={{ marginLeft: "5px" }}>{buttonUpload}</div>
         </div>
       </div>
     );
