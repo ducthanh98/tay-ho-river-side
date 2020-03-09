@@ -3,8 +3,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Upload, Input, Button, notification } from "antd";
 import "./Upload.css";
 import { FetchApi } from "../../../utils";
-
-//FIXME: sử dụng PureComponent, og nên tìm hiểu sự khác biệt giữa PureComponent và Component, hàm shouldComponentUpdate để làm gì
 class UploadFile extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +12,9 @@ class UploadFile extends React.Component {
       previewImage: "",
       name: "",
       newfile: true,
-      documents: this.props.documents
+      upload: false,
+      documents: [],
+      action: this.props.action
     };
   }
 
@@ -25,29 +25,20 @@ class UploadFile extends React.Component {
   };
 
   upLoad = async file => {
-    this.setState({ newfile: true });
     let formData = new FormData();
     formData.append("file", file);
 
     try {
       const res = await FetchApi.uploadFile(formData);
       if (res.status === 200) {
+        this.setState({upload: false, newfile: true})
         let item = { name: this.state.name, url: res.data[0].fileUrl };
-        let { documents } = this.state;
-        console.log('document', documents)
+        let {documents} = this.state;
         documents.pop();
-        console.log('document1', documents)
-        documents.push(item)
-        console.log('document2', documents)
-        this.setState({documents: [...documents]})
-        // this.setState(state => {
-        //   const list = state.documents;
-        //   list.pop();
-        //   list.push(item);
-        //   return {
-        //     list
-        //   };
-        // });
+        documents.push(item);
+        this.setState({documents: [...documents]});
+        this.state.action(this.state.documents)
+
       } else {
         throw Error(res.message);
       }
@@ -66,35 +57,27 @@ class UploadFile extends React.Component {
       }
     });
 
-    this.setState(state => {
-      const list = state.documents.splice(index, 1);
-      return {
-        list
-      };
-    });
+    docs.splice(index, 1)
+    this.setState({documents: [...docs]})
+    this.state.action(this.state.documents)
+
   };
 
   addNewFile = () => {
 
-    // let value = {};
-    // this.setState(state => {
-    // // phần này og xem lại lần trước t giải thích về chỗ này rồi
-    //   const list = state.documents.push(value);
-    //   return {
-    //     list
-    //   };
-    // });
-
-    let { newfile, documents } = this.state;
+    let { newfile, documents, upload } = this.state;
+    upload = true
+    if (newfile) documents.push({})
     newfile = false;
-    this.setState({ newfile: newfile });
-    documents.push({})
     this.setState({ documents: [...documents] });
+    this.setState({ newfile ,upload });
+
+
   };
 
   renderUploadButton = () => {
-    const { newfile } = this.state;
-    if (newfile) {
+    const { upload } = this.state;
+    if (!upload) {
       return null;
     }
     return (
@@ -104,6 +87,7 @@ class UploadFile extends React.Component {
       </div>
     );
   };
+
   dummyRequest = ({ file, onSuccess }) => {
     //FIXME: để disable auto post của Upload trong antd
 
@@ -113,7 +97,6 @@ class UploadFile extends React.Component {
   };
 
   render() {
-    //FIXME: không khai báo trong render, render không có mục đích để làm việc này, khai báo nó ở bên ngoài
     let buttonUpload = (
       <div>
         <div className="clearfix">
@@ -132,10 +115,7 @@ class UploadFile extends React.Component {
         </div>
       </div>
     );
-    //FIXME: không khai báo trong render
-    //phần này nên tách thành 1 hàm riêng cho việc render array này
     let input = this.state.documents.map((item, i) => (
-      //FIXME: key cần để là string,không phải number
       <div key={i} style={{ marginLeft: "6px" }}>
         <h5>Tên file</h5>
         <Input

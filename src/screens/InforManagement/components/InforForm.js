@@ -13,7 +13,7 @@ const Infor = () => {
         label:"Email"
       },
       {
-        name:"LinkFanpage",
+        name:"linkFanpage",
         label:"Link fanpage facebook"
       },
       {

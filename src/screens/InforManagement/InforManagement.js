@@ -18,6 +18,7 @@ class Infor extends React.Component {
         description: "dfdf",
         officePhone: "",
         linkFanpage: "",
+        Email: "",
         createdTime: "",
         address: "",
         documents: []
@@ -37,10 +38,17 @@ class Infor extends React.Component {
     this.getInfor();
   }
 
+  updateData = (data) => {
+
+    this.setState({documents: [...data]})
+
+  }
+
   getInfor = async () => {
     try {
       const res = await FetchApi.getInforManager();
       if (res.status === 200) {
+        
         this.setState(prevState => {
           let data = Object.assign({}, prevState.data);
           data.id = res.data.id;
@@ -49,11 +57,13 @@ class Infor extends React.Component {
           data.officePhone = res.data.officePhone;
           data.linkFanpage = res.data.linkFanpage;
           data.createdTime = res.data.createdTime;
+          data.Email = res.data.Email;
           data.address = res.data.address;
           data.documents = res.data.documents;
 
           return { data };
         });
+
       } else {
         throw Error(res.message);
       }
@@ -65,8 +75,7 @@ class Infor extends React.Component {
   onFinish = async values => {
 
     const start = Date.now();
-    console.log('doc', this.state.documents)
-    let data
+    let { data } = this.state
     this.setState( prevState => {
       data = Object.assign({}, prevState.data);
       data.officePhone = values.officePhone;
@@ -118,7 +127,9 @@ class Infor extends React.Component {
                     <InforForm />
                   </TabPane>
                   <TabPane tab="TÀI LIỆU" key="2">
-                    <Uploadfile documents={this.state.documents} />
+                    <Uploadfile 
+                      action = {this.updateData}
+                    />
                   </TabPane>
                 </Tabs>
               </Col>
