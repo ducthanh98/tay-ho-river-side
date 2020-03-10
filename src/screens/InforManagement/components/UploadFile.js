@@ -7,6 +7,7 @@ class UploadFile extends React.Component {
   constructor(props) {
     super(props);
 
+    // TODO: có thể dùng luôn this.props.action không nhất thiết phải gán lại vào state cho nặng
     this.state = {
       previewVisible: false,
       previewImage: "",
@@ -27,7 +28,6 @@ class UploadFile extends React.Component {
   upLoad = async file => {
     let formData = new FormData();
     formData.append("file", file);
-
     try {
       const res = await FetchApi.uploadFile(formData);
       if (res.status === 200) {
@@ -50,6 +50,10 @@ class UploadFile extends React.Component {
   onRemove = e => {
     let docs = this.state.documents;
     let index;
+
+    // FIXME : return ko thể break foreach , có thể dùng findIndex
+    //  khi upload file sẽ có 1 mã uid nên dùng mã đó để tìm index
+
     docs.forEach((element, i) => {
       if (element.url.includes(e.name.split(" ").join("-"))) {
         index = i;
@@ -97,6 +101,8 @@ class UploadFile extends React.Component {
   };
 
   render() {
+    // TODO : thêm render trước các hàm return html cho dễ hiểu, chung format
+
     let buttonUpload = (
       <div>
         <div className="clearfix">

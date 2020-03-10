@@ -9,6 +9,7 @@ class Infor extends React.Component {
   constructor(props) {
     super(props);
 
+    // TODO: những thuộc tính cố định thì không cần đưa vào state có thể để bên ngoài
     this.state = {
       value: "",
       documents: [],
@@ -76,6 +77,8 @@ class Infor extends React.Component {
 
     const start = Date.now();
     let { data } = this.state
+
+
     this.setState( prevState => {
       data = Object.assign({}, prevState.data);
       data.officePhone = values.officePhone;
@@ -90,6 +93,7 @@ class Infor extends React.Component {
     try {
       const res = await FetchApi.putInfo(data);
       if (res.status === 200) {
+
         console.log("ress", res.data);
       } else {
         throw Error(res.message);
@@ -127,7 +131,8 @@ class Infor extends React.Component {
                     <InforForm />
                   </TabPane>
                   <TabPane tab="TÀI LIỆU" key="2">
-                    <Uploadfile 
+                    <Uploadfile
+                        // TODO: để tên ý nghĩa hơn
                       action = {this.updateData}
                     />
                   </TabPane>
