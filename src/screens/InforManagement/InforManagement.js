@@ -9,14 +9,13 @@ class Infor extends React.Component {
   constructor(props) {
     super(props);
 
-    // TODO: những thuộc tính cố định thì không cần đưa vào state có thể để bên ngoài
     this.state = {
       value: "",
       documents: [],
       data: {
-        id: "1",
-        name: "T Oerr",
-        description: "dfdf",
+        id: "",
+        name: "",
+        description: "",
         officePhone: "",
         linkFanpage: "",
         Email: "",
@@ -24,14 +23,6 @@ class Infor extends React.Component {
         address: "",
         documents: []
       },
-      layout: {
-        labelCol: {
-          span: 8
-        },
-        wrapperCol: {
-          span: 16
-        },
-      }
     };
   }
 
@@ -104,6 +95,15 @@ class Infor extends React.Component {
 
   };
 
+  layout = {
+    labelCol: {
+      span: 8
+    },
+    wrapperCol: {
+      span: 16
+    },
+  }
+
   render() {
     return (
       <Row>
@@ -119,7 +119,7 @@ class Infor extends React.Component {
         </Row>
         <div style={{ marginTop: "30px" }}>
           <Form
-            {...this.state.layout}
+            {...this.layout}
             name="nest-messages"
             onFinish={this.onFinish}
             id="form1"
@@ -132,7 +132,6 @@ class Infor extends React.Component {
                   </TabPane>
                   <TabPane tab="TÀI LIỆU" key="2">
                     <Uploadfile
-                        // TODO: để tên ý nghĩa hơn
                       action = {this.updateData}
                     />
                   </TabPane>

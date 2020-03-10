@@ -7,7 +7,6 @@ class UploadFile extends React.Component {
   constructor(props) {
     super(props);
 
-    // TODO: có thể dùng luôn this.props.action không nhất thiết phải gán lại vào state cho nặng
     this.state = {
       previewVisible: false,
       previewImage: "",
@@ -15,7 +14,6 @@ class UploadFile extends React.Component {
       newfile: true,
       upload: false,
       documents: [],
-      action: this.props.action
     };
   }
 
@@ -37,7 +35,7 @@ class UploadFile extends React.Component {
         documents.pop();
         documents.push(item);
         this.setState({documents: [...documents]});
-        this.state.action(this.state.documents)
+        this.props.action(this.state.documents)
 
       } else {
         throw Error(res.message);
@@ -49,21 +47,11 @@ class UploadFile extends React.Component {
 
   onRemove = e => {
     let docs = this.state.documents;
-    let index;
 
-    // FIXME : return ko thể break foreach , có thể dùng findIndex
-    //  khi upload file sẽ có 1 mã uid nên dùng mã đó để tìm index
-
-    docs.forEach((element, i) => {
-      if (element.url.includes(e.name.split(" ").join("-"))) {
-        index = i;
-        return index;
-      }
-    });
-
+    let index = docs.findIndex(element => element.url.includes(e.name.split(" ").join("-")))
     docs.splice(index, 1)
     this.setState({documents: [...docs]})
-    this.state.action(this.state.documents)
+    this.props.action(this.state.documents)
 
   };
 
@@ -101,9 +89,8 @@ class UploadFile extends React.Component {
   };
 
   render() {
-    // TODO : thêm render trước các hàm return html cho dễ hiểu, chung format
 
-    let buttonUpload = (
+    let renderButtonUpload = (
       <div>
         <div className="clearfix">
           <Upload
@@ -121,7 +108,7 @@ class UploadFile extends React.Component {
         </div>
       </div>
     );
-    let input = this.state.documents.map((item, i) => (
+    let renderInput = this.state.documents.map((item, i) => (
       <div key={i} style={{ marginLeft: "6px" }}>
         <h5>Tên file</h5>
         <Input
@@ -141,9 +128,9 @@ class UploadFile extends React.Component {
           <div
             style={{ display: "flex", paddingTop: "20px", marginBottom: "5px" }}
           >
-            {input}
+            {renderInput}
           </div>
-          <div style={{ marginLeft: "5px" }}>{buttonUpload}</div>
+          <div style={{ marginLeft: "5px" }}>{renderButtonUpload}</div>
         </div>
       </div>
     );
