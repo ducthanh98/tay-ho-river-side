@@ -85,7 +85,8 @@ class Infor extends React.Component {
       const res = await FetchApi.putInfo(data);
       if (res.status === 200) {
 
-        console.log("ress", res.data);
+        notification["success"]({ message: "success", description: "Đã lưu thông tin" });
+
       } else {
         throw Error(res.message);
       }
