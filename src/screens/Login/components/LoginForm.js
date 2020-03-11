@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Form, Input, Button, notification } from "antd";
 import { AuthService } from "../../../services/authService";
@@ -24,7 +25,7 @@ const LoginForm = props => {
   const renderBtnLogin = () => {
     return (
       <Button type="primary" htmlType="submit" className="login-btn">
-        Submit
+        Đăng nhập
       </Button>
     );
   };

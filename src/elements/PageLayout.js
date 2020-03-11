@@ -27,9 +27,9 @@ class PageLayout extends Component {
               <Route path="/notification-detail">
                 <NotificationDetail />
               </Route>
-              {/*<Route path='/project-infomation-management'>*/}
-              {/*    <ProjectInfomationManagement/>*/}
-              {/*</Route>*/}
+              <Route path='/infor-management'>
+                  <Infor/>
+              </Route>
             </Switch>
           </Layout.Content>
         </Layout>

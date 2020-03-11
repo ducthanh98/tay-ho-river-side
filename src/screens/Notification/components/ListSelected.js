@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {CloseOutlined} from '@ant-design/icons'
 
 
@@ -53,14 +54,13 @@ const ListSelected =(props)=> {
 
                                     <CloseOutlined onClick={()=>removeReceiver(index)} />
                                 </li>
-                            )
+                            );
                         })
                     }
                 </ul>
                 <img alt={'list receiver'} style={styles.img} onClick={()=>props.handleShowModal(true)} className={'render-reciever-btn'} src={require('../../../assets/images/format_list_bulleted-24px.svg')} />
 
             </div>
-
         );
 }
 

@@ -49,7 +49,7 @@ const Notification = (props)=> {
             values.type = listReceiver.length ? 'some' : 'all';
             values.deviceId = listReceiver.map(v => v.id);
 
-
+            
             LoadingService.setAndBroadcast(true);
             const res = await FetchApi.createNotification(values)
 

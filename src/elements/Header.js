@@ -90,6 +90,7 @@ const CustomHeader = (props)=>{
     const {userName} = AuthService.get();
 
 
+
     return(
                     <Header style={styles.headerWrap}>
                         {/*<Dropdown overlay={renderMenu}*/}
@@ -105,8 +106,8 @@ const CustomHeader = (props)=>{
                         <span style={styles.username}>{userName}</span>
                         <Avatar style={styles.avatar} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
 
-                    </Header>
-    )
+        </Header>
+    );
 }
 
 

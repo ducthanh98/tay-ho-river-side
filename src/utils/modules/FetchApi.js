@@ -15,22 +15,23 @@ function fetchWithTimeOut(promise, ms = 30000) {
  * @param {*} header {method,}
  */
 const CommonCall = async (api, header) => {
-  console.log('api', api);
   try {
     let headers = {
       'Content-Type': 'application/json',
     };
-
-    const head = {...header, headers};
-    let response = await fetchWithTimeOut(fetch(api, head));
-    console.log('response', response);
+    let head = {...header,headers};
+    let response;
+    if (api.includes("/api/v1/file/upload")){
+      response = await fetchWithTimeOut(fetch(api, header)); 
+    } else {
+      response = await fetchWithTimeOut(fetch(api, head));
+    }
     //maintance
     if (response.status === 502) {
       return {isSuccess: false, message: STRINGS.error_500};
     }
 
     const result = await response.json();
-    console.log('result', result);
 
     return result;
   } catch (error) {
@@ -42,12 +43,14 @@ const CommonCall = async (api, header) => {
 };
 
 const FetchApi = {
+
   login: (data) => {
     const header = {
       method: 'POST',
       mode: "cors",
       body: JSON.stringify(data)
     };
+
     const api = Api.login;
     return CommonCall(api, header);
   },
@@ -69,7 +72,31 @@ const FetchApi = {
     };
     const api = Api.createNotification;
     return CommonCall(api, header);
-  }
+  },
+  uploadFile: (data) => {
+    const header = {
+      method: 'POST',
+      body: data
+    };
+    const api = Api.uploadFile;
+    return CommonCall(api, header);
+  },
+
+  putInfo: (data) => {
+    const header = {
+      method: 'PUT',
+      mode: "cors",
+      body: JSON.stringify(data)
+    };
+    const api = Api.putInfo;
+    return CommonCall(api, header);
+  },
+  getInforManager: () => {
+    const header = {method: 'GET'};
+    const api = Api.getInforManager;
+    return CommonCall(api, header);
+  },
+
 };
 
 export {FetchApi};

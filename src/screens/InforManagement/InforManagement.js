@@ -1,129 +1,145 @@
-import React from 'react'
-import { Row, Col, Tabs, Breadcrumb, Button, Form } from 'antd';
+import React from "react";
 import Uploadfile from "./components/UploadFile";
 import InforForm from "./components/InforForm";
+import { FetchApi } from "../../utils/modules";
+import { Form, Button, Row, Col, Tabs, Breadcrumb, notification } from "antd";
+import {LoadingService} from "../../services";
 
 const { TabPane } = Tabs;
-
 class Infor extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      value: "",
-      documents: [],
-      data: {
-        id: '1',
-        name: 'T Oerr',
-        description: 'dfdf',
-        officePhone: '',
-        linkFanpage: '',
-        createdTime: '',
-        address: '',
-        documents: []
-      },
+    state = {
+      data:null
     }
-  }
+
 
   componentDidMount() {
-    fetch('http://139.162.53.137:3000/api/v1/project', {
-      method: 'GET',
-      })
-      .then((res)=>{
-        return res.json()
-      }).then((data1)=>{
-        this.setState(prevState => {
-          let data = Object.assign({}, prevState.data);
-          data.id = data1.data.id;
-          data.name = data1.data.name;
-          data.description = data1.data.description;           
-          data.officePhone = data1.data.officePhone;                     
-          data.linkFanpage = data1.data.linkFanpage;           
-          data.createdTime = data1.data.createdTime;
-          data.address = data1.data.address;                 
-          data.documents = data1.data.documents;                
-
-          return { data };                             
-        })
-      })
-      .catch((error) => console.log(error))
+    this.getInfor();
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      const start = Date.now();
-      this.setState(prevState => {
-        let data = Object.assign({}, prevState.data);
-        data.officePhone = values.officePhone;                 
-        data.linkFanpage = values.linkFanpage;         
-        data.createdTime = start; 
-        data.address = values.address;  
-        data.Email = values.Email;             
-        data.documents = prevState.documents;
-        const body = JSON.stringify(data);
+  updateDocuments = (documents) => {
 
-        fetch('http://139.162.53.137:3000/api/v1/project', {
-          method: 'PUT',
-          body: body,
-          mode: 'cors',
-          headers: {
-              'Content-Type': 'application/json'
-          }
-          })
-          .then((res)=>{
-            return res.json()
-          }).then((data)=>{
-            console.log('data update', data)
-          })
-          .catch((error) => console.log(error))
-        return { data };                              
-      })
-      
-      if (!err) {
+    this.setState({documents});
+
+  }
+
+  getInfor = async () => {
+    try {
+      LoadingService.setAndBroadcast(true);
+
+      const res = await FetchApi.getInforManager();
+
+
+      if (res.status === 200) {
+      this.setState({data:res.data})
+      } else {
+        throw Error(res.message);
       }
-    });
+
+
+    } catch (e) {
+      notification["error"]({ message: "Error", description: e.message });
+    }
+    finally {
+      LoadingService.setAndBroadcast(false);
+    }
   };
 
-  render() {
+  onFinish = async values => {
+    const data = {...this.state.data,...values};
 
-    const {form} = this.props
+    try {
+      LoadingService.setAndBroadcast(true);
+
+
+      const res = await FetchApi.putInfo(data);
+
+
+      if (res.status === 200) {
+        notification["success"]({ message: "success", description: "Đã lưu thông tin" });
+      } else {
+        throw Error(res.message);
+      }
+
+
+    } catch (e) {
+      notification["error"]({ message: "Error", description: e.message });
+    }
+    finally {
+      LoadingService.setAndBroadcast(false);
+    }
+
+  };
+
+  layout = {
+    labelCol: {
+      span: 8
+    },
+    wrapperCol: {
+      span: 16
+    },
+  }
+
+  renderForm=()=>{
+    if(!this.state.data) return;
+
     return (
-      <div>
-        <Form onSubmit={this.handleSubmit} id="form1">
+        <Form
+            {...this.layout}
+            name="nest-messages"
+            onFinish={this.onFinish}
+            id="form1"
+            initialValues={this.state.data}
+        >
           <Row>
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <a href="#">Quản lý toà nhà</a>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <a href="#">Quản lý thông tin</a>
-              </Breadcrumb.Item>
-            </Breadcrumb>
-            <Row>
-              <Col span={23}>
-                <Tabs defaultActiveKey="1" >
-                  <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
-                    <InforForm
-                      form={form}
-                    />
-                  </TabPane>
-                  <TabPane tab="TÀI LIỆU" key="2">
-                    <Uploadfile />
-                  </TabPane>
-                </Tabs>
-              </Col>
-              <Col span={1}>
-                <Button type="primary" htmlType="submit" form="form1">Lưu</Button>
-              </Col>
-            </Row>
+            <Col span={23}>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
+                  <Row>
+                    <InforForm data = {this.state.data} proj/>
+                  </Row>
+
+                </TabPane>
+                <TabPane tab="TÀI LIỆU" key="2">
+                  <Uploadfile
+                      updateDocuments = {this.updateDocuments}
+                      documents = {this.state.data?.documents}
+                  />
+                </TabPane>
+              </Tabs>
+            </Col>
+            <Col span={1}>
+              <Button type="primary" htmlType="submit" form="form1">
+                Lưu
+              </Button>
+            </Col>
           </Row>
         </Form>
-      </div>
+    )
+  }
+
+  render() {
+    return (
+      <Row>
+        <Col span={24}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="#">Quản lý toà nhà</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="#">Quản lý thông tin</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </Col>
+        <Col span={24}>
+          <div style={{ marginTop: "30px" }}>
+
+            {this.renderForm()}
+
+          </div>
+        </Col>
+      </Row>
     );
   }
 }
 
-const WrappedInfor = Form.create()(Infor)
-
-export default WrappedInfor;
+export default Infor;

@@ -1,58 +1,63 @@
 import React from "react";
-import { Row, Col, Form, Input } from "antd";
+import { Form, Input, Col } from "antd";
 
-//FIXME: a không nhầm thì phần này k được dùng nữa đúng không, nếu không thì e xoá nó đi
-const InforForm = props => {
-  const { getFieldDecorator } = props.form;
+const Infor = () => {
+    const children = [
+      {
+        name:"officePhone",
+        label:"Số điện thoại",
+        colSpan:5,
+        wrapperCol:{span:23},
+      },
+      {
+        name:"Email",
+        label:"Email",
+        colSpan:8,
+        wrapperCol:{span:23},
+
+      },
+      {
+        name:"linkFanpage",
+        label:"Link fanpage facebook",
+        colSpan:11,
+        wrapperCol:{span:24},
+
+      },
+      {
+        name:"address",
+        label:"Địa chỉ",
+        colSpan:24,
+        wrapperCol:{span:24},
+      }
+    ];
+
+
+
   return (
-    <Row>
-      <Row>
-        <h3>Văn phòng giao dịch</h3>
-      </Row>
-      <Row>
-        <Col>
-          <Row gutter={[5, 0]}>
-            <Col span={4} pull={0}>
-              <Form.Item>
-                Số điện thoại
-                {getFieldDecorator("officePhone", {
-                  rules: [{ required: true, message: "required!" }]
-                })(<Input placeholder="Số điện thoại" />)}
-              </Form.Item>
-            </Col>
-            <Col span={6} pull={0}>
-              <Form.Item>
-                Email
-                {getFieldDecorator("Email", {
-                  rules: [{ required: true, message: "required!" }]
-                })(<Input placeholder="Email" />)}
-              </Form.Item>
-            </Col>
-            <Col span={14} pull={0}>
-              <Form.Item>
-                Link fanpage facebook
-                {getFieldDecorator("linkFanpage", {
-                  rules: [{ required: true, message: "required!" }]
-                })(<Input placeholder="Link fanpage facebook" />)}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Row gutter={[5, 0]}>
-        <Col>
-          <Form.Item>
-            Địa chỉ
-            {getFieldDecorator("address", {
-              rules: [{ required: true, message: "required!" }]
-            })(<Input placeholder="Địa chỉ" />)}
-          </Form.Item>
-        </Col>
-      </Row>
-    </Row>
-  );
+      <>
+          {
+            children.map((e,i) =>(
+                    <Col style={{marginTop:20}} key={i} span={e.colSpan}>
+                      <p>{e.label}</p>
+                      <Form.Item
+                          name={e.name}
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Trường này không được trống',
+                            },
+                          ]}
+                          wrapperCol={e.wrapperCol}
+
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                )
+            )
+          }
+      </>
+  )
 };
 
-// const WrappedLogin = Form.create()(InforForm)
-
-export default InforForm;
+export default Infor;
