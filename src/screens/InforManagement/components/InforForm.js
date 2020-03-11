@@ -1,48 +1,64 @@
 import React from "react";
-import { Form, Input, Row, Col } from "antd";
+import { Form, Input, Col } from "antd";
 
-const Infor = () => {
-
+const Infor = ({data}) => {
     const children = [
       {
-      name:"officePhone",
-      label:"Số điện thoại"
+        name:"officePhone",
+        label:"Số điện thoại",
+        colSpan:5,
+        wrapperCol:{span:23},
+        inputProperty:{type:"tel"}
       },
       {
         name:"Email",
-        label:"Email"
+        label:"Email",
+        colSpan:8,
+        wrapperCol:{span:23},
+
       },
       {
         name:"linkFanpage",
-        label:"Link fanpage facebook"
+        label:"Link fanpage facebook",
+        colSpan:11,
+        wrapperCol:{span:24},
+
       },
       {
         name:"address",
-        label:"Địa chỉ"
+        label:"Địa chỉ",
+        colSpan:24,
+        wrapperCol:{span:24},
       }
     ];
 
-    let form =  children.map((e,i) =>
-      <Row gutter={[0, 6]} key={i}>
-        <Col span={24}>
-          <Form.Item
-            name={e.name}
-            label={e.label}
-            rules={[
-              {
-                required: true,
-                message: 'Input something!',
-              },
-            ]}
-          >
-            <Input placeholder="Input something!" />
-          </Form.Item>
-        </Col>
-      </Row>
-    )
 
-  return form;
 
+  return (
+      <>
+          {
+            children.map((e,i) =>(
+                    <Col style={{marginTop:20}} key={i} span={e.colSpan}>
+                      <p>{e.label}</p>
+                      <Form.Item
+                          name={e.name}
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Trường này không được trống',
+                            },
+                          ]}
+                          wrapperCol={e.wrapperCol}
+
+                      >
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                )
+            )
+          }
+      </>
+  )
 };
 
 export default Infor;

@@ -6,33 +6,18 @@ import { Form, Button, Row, Col, Tabs, Breadcrumb, notification } from "antd";
 
 const { TabPane } = Tabs;
 class Infor extends React.Component {
-  constructor(props) {
-    super(props);
+    state = {
+      data:null
+    }
 
-    this.state = {
-      value: "",
-      documents: [],
-      data: {
-        id: "",
-        name: "",
-        description: "",
-        officePhone: "",
-        linkFanpage: "",
-        Email: "",
-        createdTime: "",
-        address: "",
-        documents: []
-      },
-    };
-  }
 
   componentDidMount() {
     this.getInfor();
   }
 
-  updateData = (data) => {
+  updateDocuments = (documents) => {
 
-    this.setState({documents: [...data]})
+    this.setState({documents});
 
   }
 
@@ -41,21 +26,8 @@ class Infor extends React.Component {
       const res = await FetchApi.getInforManager();
       if (res.status === 200) {
         
-        this.setState(prevState => {
-          let data = Object.assign({}, prevState.data);
-          data.id = res.data.id;
-          data.name = res.data.name;
-          data.description = res.data.description;
-          data.officePhone = res.data.officePhone;
-          data.linkFanpage = res.data.linkFanpage;
-          data.createdTime = res.data.createdTime;
-          data.Email = res.data.Email;
-          data.address = res.data.address;
-          data.documents = res.data.documents;
-
-          return { data };
-        });
-
+      this.setState({data:res.data})
+      console.log(this.state.data)
       } else {
         throw Error(res.message);
       }
@@ -65,23 +37,10 @@ class Infor extends React.Component {
   };
 
   onFinish = async values => {
-
-    const start = Date.now();
-    let { data } = this.state
-
-
-    this.setState( prevState => {
-      data = Object.assign({}, prevState.data);
-      data.officePhone = values.officePhone;
-      data.linkFanpage = values.linkFanpage;
-      data.createdTime = start;
-      data.address = values.address;
-      data.Email = values.Email;
-      data.documents = prevState.documents;
-      return data ;
-    });
+    const data = {...this.state.data,...values};
 
     try {
+      console.log(data);
       const res = await FetchApi.putInfo(data);
       if (res.status === 200) {
 
@@ -105,10 +64,48 @@ class Infor extends React.Component {
     },
   }
 
+  renderForm=()=>{
+    if(!this.state.data) return;
+
+    return (
+        <Form
+            {...this.layout}
+            name="nest-messages"
+            onFinish={this.onFinish}
+            id="form1"
+            initialValues={this.state.data}
+        >
+          <Row>
+            <Col span={23}>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
+                  <Row>
+                    <InforForm data = {this.state.data} proj/>
+                  </Row>
+
+                </TabPane>
+                <TabPane tab="TÀI LIỆU" key="2">
+                  <Uploadfile
+                      updateDocuments = {this.updateDocuments}
+                      documents = {this.state.data?.documents}
+                  />
+                </TabPane>
+              </Tabs>
+            </Col>
+            <Col span={1}>
+              <Button type="primary" htmlType="submit" form="form1">
+                Lưu
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+    )
+  }
+
   render() {
     return (
       <Row>
-        <Row>
+        <Col span={24}>
           <Breadcrumb>
             <Breadcrumb.Item>
               <a href="#">Quản lý toà nhà</a>
@@ -117,35 +114,12 @@ class Infor extends React.Component {
               <a href="#">Quản lý thông tin</a>
             </Breadcrumb.Item>
           </Breadcrumb>
-        </Row>
-        <div style={{ marginTop: "30px" }}>
-          <Form
-            {...this.layout}
-            name="nest-messages"
-            onFinish={this.onFinish}
-            id="form1"
-          >
-            <Row>
-              <Col span={23}>
-                <Tabs defaultActiveKey="1">
-                  <TabPane tab="THÔNG TIN VĂN PHÒNG" key="1">
-                    <InforForm />
-                  </TabPane>
-                  <TabPane tab="TÀI LIỆU" key="2">
-                    <Uploadfile
-                      action = {this.updateData}
-                    />
-                  </TabPane>
-                </Tabs>
-              </Col>
-              <Col span={1}>
-                <Button type="primary" htmlType="submit" form="form1">
-                  Lưu
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
+        </Col>
+        <Col span={24}>
+          <div style={{ marginTop: "30px" }}>
+            {this.renderForm()}
+          </div>
+        </Col>
       </Row>
     );
   }
