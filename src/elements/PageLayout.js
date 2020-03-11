@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route,Redirect } from "react-router-dom";
 import CustomerManagement from "../screens/CustomerManagement/CustomerManagement";
 import Notification from "../screens/Notification/Notification";
 import Infor from "../screens/InforManagement/InforManagement";
@@ -18,6 +18,9 @@ class PageLayout extends Component {
           <Header />
           <Layout.Content style={{ margin: "20px" }}>
             <Switch>
+              <Route path="/" exact redirect='infor-management'>
+                <Redirect to='infor-management'/>
+              </Route>
               <Route path="/customer-management">
                 <CustomerManagement />
               </Route>

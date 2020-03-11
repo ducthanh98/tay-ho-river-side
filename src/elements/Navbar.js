@@ -70,7 +70,7 @@ const Navbar =()=>{
                         <Menu.Item key="1">
                             <Link to={'/infor-management'}>
                               <img src={require('../assets/images/business-24px.svg')} alt={'business'}/> &nbsp;
-                              <span>Quản lý dự án</span>
+                              <span>Quản lý thông tin</span>
                             </Link>
                         </Menu.Item>
 
