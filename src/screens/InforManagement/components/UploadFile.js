@@ -152,7 +152,7 @@ class UploadFile extends React.Component {
               accept={"application/pdf"}
               showUploadList={false}
           >
-            <SwapOutlined /> Thay đổi {index}
+            <SwapOutlined /> Thay đổi
           </Upload>
         </Menu.Item>
         <Menu.Item key="1" onClick={()=> this.onRemove(index)}>
